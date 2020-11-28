@@ -57,12 +57,18 @@ class Main {
 
     sort() {
         switch (this.algorithm) {
-            case 'bubble-sort': new BubbleSort(this.arrayCellsList).sort();
+            case 'bubble-sort':
+                new BubbleSort(this.arrayCellsList).sort();
                 break;
-            case 'merge-sort': new MergeSort(this.arrayCellsList).sort();
+            case 'merge-sort':
+                new MergeSort(this.arrayCellsList).sort();
                 break;
-            case 'heap-sort': new HeapSort(this.arrayCellsList).sort();
+            case 'heap-sort':
+                new HeapSort(this.arrayCellsList).sort();
                 break;
+
+            case 'quick-sort':
+                new QuickSort(this.arrayCellsList).sort();
         }
     }
 
@@ -102,6 +108,7 @@ class Nav {
             this.main.algorithm = 'heap-sort';
             for (let i = 0; i < this.navSortingItems.children.length; i++) 
                 this.navSortingItems.children[i].style.color = 'white';
+            
             this.heapSortBtn.style.color = 'red';
         });
 
@@ -109,6 +116,7 @@ class Nav {
             this.main.algorithm = 'quick-sort';
             for (let i = 0; i < this.navSortingItems.children.length; i++) 
                 this.navSortingItems.children[i].style.color = 'white';
+            
             this.quickSortBtn.style.color = 'red';
         });
 
@@ -116,6 +124,7 @@ class Nav {
             this.main.algorithm = 'merge-sort';
             for (let i = 0; i < this.navSortingItems.children.length; i++) 
                 this.navSortingItems.children[i].style.color = 'white';
+            
             this.mergeSortBtn.style.color = 'red';
         });
     }
@@ -180,12 +189,83 @@ class BubbleSort {
     }
 }
 
-class quickSort{
-    
+class QuickSort {
+    array;
+    j = [];
+
+    constructor(array) {
+        this.array = array.children;
+    }
+
+    sort() {
+        let numbers = [];
+        for (let i = 0; i < this.array.length; i++) {
+            numbers.push(this.array[i].value);
+        }
+
+        this.quickSort(numbers, 0, numbers.length - 1);
+      
+        let i = 0;
+        let quickSortInterval = setInterval(() => {
+            if (i >= this.j.length) {
+                clearInterval(quickSortInterval);
+                return;
+            }
+            this.switchNodes(this.j[i],this.j[i + 1]);
+            i+=2;
+        }, 100);
+        
+    }
+
+    switchNodes(i, j) {
+
+        this.array[i].style.background = 'black';
+        this.array[j].style.background = 'rgb(20,202,10)';
+        setTimeout(() => {
+            this.array[i].style.background = 'blue';
+            this.array[j].style.background = 'blue';
+        }, 35)
+        let temp = this.array[i].cloneNode(true);
+
+        this.array[i].parentNode.replaceChild(this.array[j].cloneNode(true), this.array[i]);
+        this.array[j].parentNode.replaceChild(temp, this.array[j]);
+
+    }
+
+
+    quickSort(array, start, end) {
+        if (start >= end) 
+            return;
+        
+        let boundry = this.partition(array,start,end);
+        this.quickSort(array,start,boundry - 1);
+        this.quickSort(array,boundry + 1, end);
+
+    }
+
+    partition(array, start, end) {
+        let pivot = array[end];
+        let boundry = start - 1;
+        for (let i = start; i <= end; i++) {
+            if (array[i] <= pivot) {
+                boundry++;
+                this.j.push(boundry);
+                this.j.push(i);
+                let temp = array[boundry];
+                array[boundry] = array[i];
+                array[i] = temp;
+            }
+        }
+
+        return boundry;
+    }
+
 }
 
 class HeapSort {
     array;
+    j1=[];
+    j2 = [];
 
     constructor(array) {
         this.array = array.children;
@@ -205,9 +285,10 @@ class HeapSort {
         for (let i = Math.floor(n / 2) - 1; i >= 0; i--) 
             this.heapify(array, n, i);
         
+
         for (let i = n - 1; i > 0; i--) {
-            j1.push(0);
-            j2.push(i);
+            this.j1.push(0);
+            this.j2.push(i);
             let temp = array[0];
             array[0] = array[i];
             array[i] = temp;
@@ -216,11 +297,11 @@ class HeapSort {
 
         let i = 0;
         let heapSortInteval = setInterval(() => {
-            if (i === j1.length) {
+            if (i === this.j1.length) {
                 clearInterval(heapSortInteval);
                 return;
             }
-            this.switchNodes(j1[i], j2[i]);
+            this.switchNodes(this.j1[i], this.j2[i]);
             i++;
         }, 100);
 
@@ -231,23 +312,24 @@ class HeapSort {
         let largest = i;
         let l = 2 * i + 1;
         let r = 2 * i + 2;
-    
+
         if (l < n && array[l] > array[largest]) 
             largest = l;
         
-    
-    
+
+
         if (r < n && array[r] > array[largest]) 
             largest = r;
         
-    
+
+
         if (largest != i) {
-            j1.push(i);
-            j2.push(largest);
+            this.j1.push(i);
+            this.j2.push(largest);
             let swap = array[i];
             array[i] = array[largest];
             array[largest] = swap;
-            heapify(array, n, largest);
+            this.heapify(array, n, largest);
         }
     }
 
@@ -267,16 +349,16 @@ class HeapSort {
 }
 
 
-class MergeSort{
+class MergeSort {
     array;
     cells;
-    constructor(array){
+    constructor(array) {
         this.cells = array.children;
         console.log(this.cells)
         this.array = Array.from(array.childNodes);
     }
 
-    sort(){
+    sort() {
         this.mergeSort(this.array);
         console.log(this.array);
     }
@@ -286,12 +368,13 @@ class MergeSort{
         if (array.length <= 1) 
             return array;
         
-    
+
+
         let middle = Math.ceil(array.length / 2);
         // slice the array into two.
         const left = this.mergeSort(array.splice(0, middle));
         const right = this.mergeSort(array.splice(- middle));
-    
+
         return this.merge(left, right);
     }
     merge(left, right) {
@@ -339,24 +422,27 @@ class MergeSort{
                 for (let i = 0; i < items.length; i++) {
                     if (item == (items[i].id)) 
                         resultArray.push(items[i]);
+                    
                 }
             }) 
-    
-            let j = 0; 
+
+                let j = 0;
+            
             let i = min;
             let interval = setInterval(() => {
                 if (i === max) 
                     clearInterval(interval);
                 
+
                 let index;
                 let temp = items[i].cloneNode(true);
-    
+
                 for (let k = 0; k < items.length; k++) {
                     if (items[k].id == resultArray[j].id) {
                         index = k;
                     }
                 }
-    
+
                 let temp2 = resultArray[j].cloneNode(true);
                 temp.style.backgroundColor = 'rgb(20,202,10)';
                 temp2.style.backgroundColor = 'rgb(20,202,10)';
@@ -364,16 +450,14 @@ class MergeSort{
                     temp2.style.backgroundColor = 'darkblue';
                     temp.style.backgroundColor = 'darkblue';
                 }, 20);
-    
+
                 items[i].parentElement.replaceChild(temp2, items[i]);
                 items[i].parentElement.replaceChild(temp, items[index]);
-    
+
                 j++;
                 i++;
             }, 400)
-    
+
         }
- 
-}
 
-
+    }
