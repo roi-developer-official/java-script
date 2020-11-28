@@ -20,25 +20,29 @@
 */
 
 class Main {
+
     rangeText = document.querySelector('.range_text');
     rangeInput = document.getElementById('range_input');
+    generateNewArrayBtn = document.querySelector('.nav_item__array_generete');
     arrayCellsList = document.querySelector('.array_cells__items');
     sortBtn = document.querySelector('.nav_item_sort');
     algorithm;
 
     init() {
-        this.sortBtn.addEventListener('click', this.sort.bind(this));
+        this.sortBtn.addEventListener('click', this.beforeSort.bind(this));
         this.rangeInput.value = 4;
-        this.createElement();
+        this.rangeText.textContent = 4;
+        this.createElements();
+        this.generateNewArrayBtn.addEventListener('click',this.createElements.bind(this));
         this.rangeInput.addEventListener('input', () => {
             this.rangeText.textContent = this.rangeInput.value;
-            this.createElement();
+            this.createElements();
         });
-
-
     }
 
-    createElement() {
+
+
+    createElements() {
         for (let li of this.arrayCellsList.querySelectorAll('li')) {
             li.remove();
         }
@@ -52,6 +56,19 @@ class Main {
             listItem.value = num;
             this.appendTextNumber(listItem, num);
             this.arrayCellsList.append(listItem);
+        }
+    }
+    beforeSort(){
+        if(this.algorithm === undefined){
+            alert('please choose an algorithm');
+        }
+        else{
+            this.sortBtn.setAttribute('disabled',true);
+            this.rangeInput.setAttribute('disabled', true);
+            this.generateNewArrayBtn.setAttribute('disabled', true);
+            this.generateNewArrayBtn.style.color = '#ccc';
+            this.sortBtn.style.color = '#ccc'
+            this.sort();
         }
     }
 
@@ -84,6 +101,28 @@ class Main {
 
     }
 }
+
+class Shared extends Main{
+    array;
+    constructor(array){
+        super();
+        this.array = array;
+    }
+    onDoneSort(){
+        for(let i = 0; i < this.array.length; i++){
+            this.array[i].style.background = 'green';
+        }
+        this.rangeInput.removeAttribute('disabled', true);
+        this.sortBtn.removeAttribute('disabled',true);
+        this.sortBtn.style.color = 'white';
+        this.generateNewArrayBtn.removeAttribute('disabled', true);
+        this.generateNewArrayBtn.style.color = 'white';
+
+    }
+
+}
+
+
 class Nav {
     main = new Main();
     navSortingItems = document.querySelector('.nav_sotring__items');
@@ -98,9 +137,6 @@ class Nav {
             this.main.algorithm = 'bubble-sort';
             for (let i = 0; i < this.navSortingItems.children.length; i++) 
                 this.navSortingItems.children[i].style.color = 'white';
-            
-
-
             this.bubbleSortBtn.style.color = 'red';
         });
 
@@ -136,7 +172,6 @@ class BubbleSort {
     array;
     constructor(array) {
         this.array = array.children;
-        console.log(this.array)
     }
 
     sort() {
@@ -165,6 +200,7 @@ class BubbleSort {
         let i = 0;
         let bubbleSortInterval = setInterval(() => {
             if (i === j1.length) {
+                new Shared(this.array).onDoneSort();
                 clearInterval(bubbleSortInterval);
                 return;
             }
@@ -182,11 +218,10 @@ class BubbleSort {
             this.array[j].style.background = 'blue';
         }, 35)
         let temp = this.array[i].cloneNode(true);
-
         this.array[i].parentNode.replaceChild(this.array[j].cloneNode(true), this.array[i]);
         this.array[j].parentNode.replaceChild(temp, this.array[j]);
-
     }
+
 }
 
 class QuickSort {
@@ -208,6 +243,7 @@ class QuickSort {
         let i = 0;
         let quickSortInterval = setInterval(() => {
             if (i >= this.j.length) {
+                new Shared(this.array).onDoneSort();
                 clearInterval(quickSortInterval);
                 return;
             }
@@ -298,6 +334,7 @@ class HeapSort {
         let i = 0;
         let heapSortInteval = setInterval(() => {
             if (i === this.j1.length) {
+                new Shared(this.array).onDoneSort();
                 clearInterval(heapSortInteval);
                 return;
             }
@@ -352,15 +389,24 @@ class HeapSort {
 class MergeSort {
     array;
     cells;
+    ms = 0;
+    
     constructor(array) {
         this.cells = array.children;
-        console.log(this.cells)
         this.array = Array.from(array.childNodes);
     }
 
     sort() {
         this.mergeSort(this.array);
-        console.log(this.array);
+    
+        for(let i = 0; i < this.cells.length; i++){
+            this.ms += 400;
+        }
+        this.ms += 40;
+       
+        setTimeout(()=>{
+            new Shared(this.cells).onDoneSort();
+        }, this.ms)
     }
 
     mergeSort(array) {
@@ -400,6 +446,7 @@ class MergeSort {
         for (let i = 0; i < resultArray.length; i++) {
             rangeArray.push(resultArray[i].id);
         }
+    
         this.replaceNodes(rangeArray);
         return resultArray;
     }
@@ -407,6 +454,7 @@ class MergeSort {
     
     replaceNodes(range) {
     
+        
         //the original ul.
         let items = this.cells;
         // the id's from the range array 
@@ -417,7 +465,8 @@ class MergeSort {
         range.forEach(item => rangeArray.push(Number.parseInt(item)));
         min = rangeArray.reduce((curr, prev) => curr < prev ? curr : prev);
         max = rangeArray.reduce((curr, prev) => curr > prev ? curr : prev);
-    
+
+         
         rangeArray.map(item => {
                 for (let i = 0; i < items.length; i++) {
                     if (item == (items[i].id)) 
@@ -426,14 +475,14 @@ class MergeSort {
                 }
             }) 
 
-                let j = 0;
-            
+           
+            let j = 0;  
             let i = min;
             let interval = setInterval(() => {
-                if (i === max) 
+                if (i === max){
                     clearInterval(interval);
+                }
                 
-
                 let index;
                 let temp = items[i].cloneNode(true);
 
@@ -458,6 +507,9 @@ class MergeSort {
                 i++;
             }, 400)
 
+    
+
         }
 
+    
     }
