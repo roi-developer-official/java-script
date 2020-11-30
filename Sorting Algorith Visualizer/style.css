@@ -10,6 +10,7 @@
     font-family: 'Oswald', sans-serif;
 }
 
+
 .nav_bar{
     background-color: blue;
     width:100%;
@@ -74,9 +75,11 @@
     display:flex;
     margin:auto;
     max-width: 40rem; 
+
     justify-content: center;
 }
 .array_cells__items{
+    position: relative;
     display:flex;
     flex-direction: row;
     align-items: flex-start;
@@ -86,10 +89,12 @@
 }
 
 .array_cell{
+
     margin-right: .09rem;
     background-color: darkblue;
     display:flex;
     justify-content: center;
+    transition: transform .1s ease;
 }
 
 .array_cell.active{

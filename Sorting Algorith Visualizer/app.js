@@ -50,30 +50,31 @@ class Main {
             const num = Math.random() * 200;
             listItem.style.height = num + 23 + 'px';
             listItem.value = num;
+            listItem.style.left = 22 * i + 'px'
             this.appendTextNumber(listItem, num);
             this.originalArray.append(listItem);
         }
 
-        for (let i = 0; i < START_LENGTH; i++) { 
+        for (let i = 0; i < START_LENGTH; i++) {
             let temp = this.originalArray.children[i].cloneNode(true);
-            this.arrayCellsList.append(temp); 
+            this.arrayCellsList.append(temp);
         }
-   
+
     }
 
     resizeArray() {
-    
+
         let parent = this.arrayCellsList;
-       
-        while(parent.firstChild){
-                parent.firstChild.remove();
+        while (parent.firstChild) {
+            parent.firstChild.remove();
         }
 
-
-       for (let i = 0; i < this.rangeInput.value; i++) {
-           let temp = this.originalArray.children[i].cloneNode(true);
-        i % 2 === 0 ? this.arrayCellsList.append(temp) : this.arrayCellsList.prepend(temp)
-      
+        for (let i = 0; i < this.rangeInput.value; i++) {
+            let temp = this.originalArray.children[i].cloneNode(true);
+            i % 2 === 0 ? this.arrayCellsList.append(temp) : this.arrayCellsList.prepend(temp)
+        }
+        for (let i = 0; i < this.arrayCellsList.children.length; i++) {
+            this.arrayCellsList.children[i].id = i;
         }
     }
 
@@ -91,6 +92,7 @@ class Main {
             const num = Math.random() * 200;
             listItem.style.height = num + 23 + 'px';
             listItem.value = num;
+            listItem.style.left = 22 * i + 'px'
             this.appendTextNumber(listItem, num);
             this.originalArray.append(listItem);
         }
@@ -108,14 +110,21 @@ class Main {
                 const num = Math.random() * 200;
                 listItem.style.height = num + 23 + 'px';
                 listItem.value = num;
+                listItem.style.left = 22 * i + 'px'
                 this.appendTextNumber(listItem, num);
                 i % 2 === 0 ? this.arrayCellsList.append(listItem) : this.arrayCellsList.prepend(listItem)
             }
-        } else 
+            for (let i = 0; i < this.arrayCellsList.children.length; i++) {
+                this.arrayCellsList.children[i].id = i;
+            }
+
+
+        } else
             for (let i = len - 1; i >= this.rangeInput.value; i--) {
                 i % 2 === 0 ? this.arrayCellsList.removeChild(this.arrayCellsList.children[i]) : this.arrayCellsList.removeChild(this.arrayCellsList.children[0])
             }
-        
+
+
 
     }
 
@@ -124,9 +133,11 @@ class Main {
         let doSort = false;
         for (let i = 0; i < arr.length - 1; i++) {
 
-            if (arr[i].value > arr[i + 1].value) 
+            if (arr[i].value > arr[i + 1].value)
                 doSort = true;
-            
+
+
+
         }
 
         if (this.algorithm === undefined) {
@@ -207,35 +218,40 @@ class Nav {
         this.main.init();
         this.bubbleSortBtn.addEventListener('click', () => {
             this.main.algorithm = 'bubble-sort';
-            for (let i = 0; i < this.navSortingItems.children.length; i++) 
+            for (let i = 0; i < this.navSortingItems.children.length; i++)
                 this.navSortingItems.children[i].style.color = 'white';
-            
+
+
+
             this.bubbleSortBtn.style.color = 'red';
         });
 
         this.heapSortBtn.addEventListener('click', () => {
             this.main.algorithm = 'heap-sort';
-            for (let i = 0; i < this.navSortingItems.children.length; i++) 
+            for (let i = 0; i < this.navSortingItems.children.length; i++)
                 this.navSortingItems.children[i].style.color = 'white';
-            
+
+
 
             this.heapSortBtn.style.color = 'red';
         });
 
         this.quickSortBtn.addEventListener('click', () => {
             this.main.algorithm = 'quick-sort';
-            for (let i = 0; i < this.navSortingItems.children.length; i++) 
+            for (let i = 0; i < this.navSortingItems.children.length; i++)
                 this.navSortingItems.children[i].style.color = 'white';
-            
+
+
 
             this.quickSortBtn.style.color = 'red';
         });
 
         this.mergeSortBtn.addEventListener('click', () => {
             this.main.algorithm = 'merge-sort';
-            for (let i = 0; i < this.navSortingItems.children.length; i++) 
+            for (let i = 0; i < this.navSortingItems.children.length; i++)
                 this.navSortingItems.children[i].style.color = 'white';
-            
+
+
 
             this.mergeSortBtn.style.color = 'red';
         });
@@ -246,6 +262,7 @@ nav.init();
 
 class BubbleSort {
     array;
+
     constructor(array) {
         this.array = array.children;
     }
@@ -253,19 +270,16 @@ class BubbleSort {
     sort() {
         let numbers = [];
         let j1 = [];
-        let j2 = [];
-        let arr = [];
+
         for (let i = 0; i < this.array.length; i++) {
             numbers.push(this.array[i].value);
         }
 
         for (let i = 0; i < numbers.length; i++) {
             for (let j = 1; j < numbers.length; j++) {
-                arr.push(j - 1);
-                arr.push(j);
                 if (numbers[j] < numbers[j - 1]) {
                     j1.push(j);
-                    j2.push(j - 1);
+                    j1.push(j - 1);
                     let temp = numbers[j];
                     numbers[j] = numbers[j - 1];
                     numbers[j - 1] = temp;
@@ -280,22 +294,31 @@ class BubbleSort {
                 clearInterval(bubbleSortInterval);
                 return;
             }
-            this.switchNodes(j1[i], j2[i], this.array);
-            i++;
-        }, 100);
+
+            this.switchNodes(j1[i], j1[i + 1]);
+            i += 2;
+        }, 150);
 
     }
 
+
     switchNodes(i, j) {
-        this.array[i].style.background = 'black';
-        this.array[j].style.background = 'rgb(20,202,10)';
-        setTimeout(() => {
-            this.array[i].style.background = 'blue';
-            this.array[j].style.background = 'blue';
-        }, 35)
-        let temp = this.array[i].cloneNode(true);
-        this.array[i].parentNode.replaceChild(this.array[j].cloneNode(true), this.array[i]);
-        this.array[j].parentNode.replaceChild(temp, this.array[j]);
+
+        let elIPos = this.array[i].getBoundingClientRect().left;
+        let elJPos = this.array[j].getBoundingClientRect().left;
+        let moveLeft = (elIPos - elJPos);
+        this.array[i].style.transform = `translateX(-${moveLeft}px)`
+        this.array[j].style.transform = `translateX(${moveLeft}px)`
+
+        this.array[j].addEventListener('transitionend', () => {
+
+            this.array[i].style.transform = `translateX(0)`
+            this.array[j].style.transform = `translateX(0)`
+            let temp = this.array[i].cloneNode(true);
+            this.array[i].parentNode.replaceChild(this.array[j].cloneNode(true), this.array[i]);
+            this.array[j].parentNode.replaceChild(temp, this.array[j]);
+
+        })
     }
 
 }
@@ -316,6 +339,7 @@ class QuickSort {
 
         this.quickSort(numbers, 0, numbers.length - 1);
 
+
         let i = 0;
         let quickSortInterval = setInterval(() => {
             if (i >= this.j.length) {
@@ -323,32 +347,37 @@ class QuickSort {
                 clearInterval(quickSortInterval);
                 return;
             }
+
             this.switchNodes(this.j[i], this.j[i + 1]);
             i += 2;
-        }, 100);
-
+        }, 150);
     }
+
 
     switchNodes(i, j) {
 
-        this.array[i].style.background = 'black';
-        this.array[j].style.background = 'rgb(20,202,10)';
-        setTimeout(() => {
-            this.array[i].style.background = 'blue';
-            this.array[j].style.background = 'blue';
-        }, 35)
-        let temp = this.array[i].cloneNode(true);
+        let elIPos = this.array[i].getBoundingClientRect().left;
+        let elJPos = this.array[j].getBoundingClientRect().left;
+        let moveLeft = (elIPos - elJPos);
+        this.array[i].style.transform = `translateX(-${moveLeft}px)`
+        this.array[j].style.transform = `translateX(${moveLeft}px)`
 
-        this.array[i].parentNode.replaceChild(this.array[j].cloneNode(true), this.array[i]);
-        this.array[j].parentNode.replaceChild(temp, this.array[j]);
+        this.array[j].addEventListener('transitionend', () => {
+            this.array[i].style.transform = `translateX(0)`
+            this.array[j].style.transform = `translateX(0)`
+            let temp = this.array[i].cloneNode(true);
+            this.array[i].parentNode.replaceChild(this.array[j].cloneNode(true), this.array[i]);
+            this.array[j].parentNode.replaceChild(temp, this.array[j]);
+        })
+
 
     }
 
-
     quickSort(array, start, end) {
-        if (start >= end) 
+        if (start >= end)
             return;
-        
+
+
 
         let boundry = this.partition(array, start, end);
         this.quickSort(array, start, boundry - 1);
@@ -362,8 +391,8 @@ class QuickSort {
         for (let i = start; i <= end; i++) {
             if (array[i] <= pivot) {
                 boundry++;
-                this.j.push(boundry);
                 this.j.push(i);
+                this.j.push(boundry);
                 let temp = array[boundry];
                 array[boundry] = array[i];
                 array[i] = temp;
@@ -395,14 +424,14 @@ class HeapSort {
 
     heapSort(array) {
         let n = this.array.length;
-        for (let i = Math.floor(n / 2) - 1; i >= 0; i--) 
+        for (let i = Math.floor(n / 2) - 1; i >= 0; i--)
             this.heapify(array, n, i);
-        
+
 
 
         for (let i = n - 1; i > 0; i--) {
-            this.j1.push(0);
             this.j2.push(i);
+            this.j1.push(0);
             let temp = array[0];
             array[0] = array[i];
             array[i] = temp;
@@ -418,7 +447,7 @@ class HeapSort {
             }
             this.switchNodes(this.j1[i], this.j2[i]);
             i++;
-        }, 100);
+        }, 150);
 
 
     }
@@ -428,14 +457,14 @@ class HeapSort {
         let l = 2 * i + 1;
         let r = 2 * i + 2;
 
-        if (l < n && array[l] > array[largest]) 
+        if (l < n && array[l] > array[largest])
             largest = l;
-        
 
 
-        if (r < n && array[r] > array[largest]) 
+
+        if (r < n && array[r] > array[largest])
             largest = r;
-        
+
 
 
         if (largest != i) {
@@ -448,18 +477,40 @@ class HeapSort {
         }
     }
 
-    switchNodes(i, j) {
-        this.array[i].style.background = 'rgb(20,202,10)';
-        this.array[j].style.background = 'rgb(20,202,10)';
-        setTimeout(() => {
-            this.array[i].style.background = 'blue';
-            this.array[j].style.background = 'blue';
-        }, 35)
-        let temp = this.array[i].cloneNode(true);
 
-        this.array[i].parentNode.replaceChild(this.array[j].cloneNode(true), this.array[i]);
-        this.array[j].parentNode.replaceChild(temp, this.array[j]);
+    switchNodes(i, j) {
+        let elIPos = this.array[i].getBoundingClientRect().left;
+        let elJPos = this.array[j].getBoundingClientRect().left;
+
+        let moveLeft = (elIPos - elJPos);
+        this.array[i].style.transform = `translateX(-${moveLeft}px)`
+        this.array[j].style.transform = `translateX(${moveLeft}px)`
+
+
+        this.array[j].addEventListener('transitionend', () => {
+            this.array[i].style.transform = `translateX(0)`
+            this.array[j].style.transform = `translateX(0)`
+            let temp = this.array[i].cloneNode(true);
+            this.array[i].parentNode.replaceChild(this.array[j].cloneNode(true), this.array[i]);
+            this.array[j].parentNode.replaceChild(temp, this.array[j]);
+
+        })
+
     }
+
+
+    // switchNodes(i, j) {
+    //     this.array[i].style.background = 'rgb(20,202,10)';
+    //     this.array[j].style.background = 'rgb(20,202,10)';
+    //     setTimeout(() => {
+    //         this.array[i].style.background = 'blue';
+    //         this.array[j].style.background = 'blue';
+    //     }, 35)
+    //     let temp = this.array[i].cloneNode(true);
+
+    //     this.array[i].parentNode.replaceChild(this.array[j].cloneNode(true), this.array[i]);
+    //     this.array[j].parentNode.replaceChild(temp, this.array[j]);
+    // }
 
 }
 
@@ -489,9 +540,11 @@ class MergeSort {
 
     mergeSort(array) {
 
-        if (array.length <= 1) 
+        if (array.length <= 1)
             return array;
-        
+
+
+
         let middle = Math.ceil(array.length / 2);
         // slice the array into two.
         const left = this.mergeSort(array.splice(0, middle));
@@ -505,10 +558,9 @@ class MergeSort {
         let j = 0;
         let rangeArray = [];
         while (i < left.length && j < right.length) {
-            if (left[i].value<right[j].value) {
+            if (left[i].value < right[j].value) {
                 resultArray.push(left[i++]);
-            }
-            else {
+            } else {
                 resultArray.push(right[j++]);
             }
         }
@@ -518,72 +570,155 @@ class MergeSort {
         while (j < right.length) {
             resultArray.push(right[j++]);
         }
-    
+
         for (let i = 0; i < resultArray.length; i++) {
             rangeArray.push(resultArray[i].id);
         }
-    
+
         this.replaceNodes(rangeArray);
         return resultArray;
     }
-    
-    
-    replaceNodes(range) {
-    
-        //the original ul.
+
+
+    // replaceNodes(range) { // the original ul.
+    //     let items = this.cells;
+    //     // the id's from the range array
+    //     let rangeArray = [];
+    //     // only the el with the id's which the original ul includes
+    //     let resultArray = [];
+    //     let min;
+    //     range.forEach(item => rangeArray.push(Number.parseInt(item)));
+    //     min = rangeArray.reduce((curr, prev) => curr<prev ? curr : prev);
+
+
+    //     rangeArray.map(item => {
+    //         for (let i = 0; i < items.length; i++) {
+    //             if (item == (items[i].id)) 
+    //                 resultArray.push(items[i]);
+
+
+
+    //         }
+    //     })
+
+    //     let i = min;
+    //     let j = 0;
+    //     let interval = setInterval(() => {
+
+    //         if (j === resultArray.length) {
+    //             clearInterval(interval);
+    //             return;
+    //         }
+
+    //         let index;
+    //         let temp = items[i].cloneNode(true);
+
+    //         for (let k = 0; k < items.length; k++) {
+    //             if (items[k].id == resultArray[j].id) {
+    //                 index = k;
+    //             }
+    //         }
+
+
+
+
+    //         let temp2 = resultArray[j].cloneNode(true);
+    //         temp.style.backgroundColor = 'rgb(20, 202, 10)';
+    //         temp2.style.backgroundColor = 'rgb(20, 202, 10)';
+    //         setTimeout(() => {
+    //             temp2.style.backgroundColor = 'darkblue';
+    //             temp.style.backgroundColor = 'darkblue';
+    //         }, 20);
+
+    //         items[i].parentElement.replaceChild(temp2, items[i]);
+    //         items[i].parentElement.replaceChild(temp, items[index]);
+
+    //         j++;
+    //         i++;
+
+    //     }, 400)
+
+
+    // }
+
+
+    replaceNodes(range) { 
+        // the original ul.
         let items = this.cells;
-        // the id's from the range array 
+        // the id's from the range array
         let rangeArray = [];
-        //only the el with the id's which the original ul includes
+        // only the el with the id's which the original ul includes
         let resultArray = [];
         let min;
         range.forEach(item => rangeArray.push(Number.parseInt(item)));
-        min = rangeArray.reduce((curr, prev) => curr < prev ? curr : prev);
-      
-         
+        min = rangeArray.reduce((curr, prev) => curr < prev ? curr : prev)
+
+
         rangeArray.map(item => {
-                for (let i = 0; i < items.length; i++) {
-                    if (item == (items[i].id)) 
-                        resultArray.push(items[i]);
+            for (let i = 0; i < items.length; i++) {
+                if (item == items[i].id)
+                    resultArray.push(items[i]);
+            }
+        })
+
+
+
+        let i = min;
+        let j = 0;
+       
+        let interval = setInterval(() => {
+            if (j === resultArray.length) {
+                clearInterval(interval);
+                return;
+            }
+
+            let index;
+            let temp = items[i].cloneNode(true);
+
+            console.log('j',j);
+
+            for (let k = 0; k < items.length; k++) {
+                if (items[k].id == resultArray[j].id) {
+                    index = k;
+                    break;
                 }
-            }) 
-
-            let i = min;
-            let j = 0;
-            let interval = setInterval(() => {
-                
-                if (j === resultArray.length) {
-                    clearInterval(interval);
-                    return;
-                }
-
-                let index;
-                let temp = items[i].cloneNode(true);
-
-                for (let k = 0; k < items.length; k++) {
-                    if (items[k].id == resultArray[j].id) {
-                        index = k;
-                    }
-                }
-
-                let temp2 = resultArray[j].cloneNode(true);
-                temp.style.backgroundColor = 'rgb(20,202,10)';
-                temp2.style.backgroundColor = 'rgb(20,202,10)';
-                setTimeout(() => {
-                    temp2.style.backgroundColor = 'darkblue';
-                    temp.style.backgroundColor = 'darkblue';
-                }, 20);
-
-                items[i].parentElement.replaceChild(temp2, items[i]);
-                items[i].parentElement.replaceChild(temp, items[index]);
-                
-                j++;
-                i++;
-           
-            }, 400)
+            }
 
 
-        }
+            let temp2 = resultArray[j].cloneNode(true);
+            items[i].parentElement.replaceChild(temp2, items[i]);
+            items[i].parentElement.replaceChild(temp, items[index]);
+     
+
+            // console.log(items[index])
+            // console.log(index);
+
+            // let elIPos = items[i].getBoundingClientRect().left;
+            // let elJPos = items[index].getBoundingClientRect().left;
+
+            // let moveLeft = (elIPos - elJPos);
+            // items[i].style.transform = `translateX(-${moveLeft}px)`
+            // items[index].style.transform = `translateX(${moveLeft}px)`
+
+
+            // items[index].addEventListener('transitionend', () => {
+
+            //     items[i].style.transform = `translateX(0)`
+            //     items[index].style.transform = `translateX(0)`
+
+            //     let temp2 = resultArray[j].cloneNode(true);
+            //     items[i].parentElement.replaceChild(temp2, items[i]);
+            //     items[i].parentElement.replaceChild(temp, items[index]);
+
+            // })
+
+            j++;
+            // i++;
+
+        }, 1500)
 
 
     }
+
+
+}
