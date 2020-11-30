@@ -18,36 +18,32 @@
             j++;
         }
 */
-
+const SET_LENGTH = 35;
+const START_LENGTH = 4;
 class Main {
-
     rangeText = document.querySelector('.range_text');
     rangeInput = document.getElementById('range_input');
     generateNewArrayBtn = document.querySelector('.nav_item__array_generete');
     arrayCellsList = document.querySelector('.array_cells__items');
     sortBtn = document.querySelector('.nav_item_sort');
+    originalArray;
     algorithm;
 
     init() {
         this.sortBtn.addEventListener('click', this.beforeSort.bind(this));
         this.rangeInput.value = 4;
         this.rangeText.textContent = 4;
-        this.createElements();
-        this.generateNewArrayBtn.addEventListener('click',this.createElements.bind(this));
+        this.generateArray();
+        this.generateNewArrayBtn.addEventListener('click', this.genrerateNewArray.bind(this));
         this.rangeInput.addEventListener('input', () => {
             this.rangeText.textContent = this.rangeInput.value;
-            this.createElements();
+            this.resizeArray();
         });
     }
 
-
-
-    createElements() {
-        for (let li of this.arrayCellsList.querySelectorAll('li')) {
-            li.remove();
-        }
-
-        for (let i = 0; i < this.rangeInput.value; i++) {
+    generateArray() {
+        this.originalArray = document.createElement('ul');
+        for (let i = 0; i < SET_LENGTH; i++) {
             const listItem = document.createElement('li');
             listItem.className = "array_cell";
             listItem.id = i;
@@ -55,21 +51,97 @@ class Main {
             listItem.style.height = num + 23 + 'px';
             listItem.value = num;
             this.appendTextNumber(listItem, num);
-            this.arrayCellsList.append(listItem);
+            this.originalArray.append(listItem);
+        }
+
+        for (let i = 0; i < START_LENGTH; i++) { 
+            let temp = this.originalArray.children[i].cloneNode(true);
+            this.arrayCellsList.append(temp); 
+        }
+   
+    }
+
+    resizeArray() {
+    
+        let parent = this.arrayCellsList;
+       
+        while(parent.firstChild){
+                parent.firstChild.remove();
+        }
+
+
+       for (let i = 0; i < this.rangeInput.value; i++) {
+           let temp = this.originalArray.children[i].cloneNode(true);
+        i % 2 === 0 ? this.arrayCellsList.append(temp) : this.arrayCellsList.prepend(temp)
+      
         }
     }
-    beforeSort(){
-        if(this.algorithm === undefined){
-            alert('please choose an algorithm');
+
+    genrerateNewArray() {
+        let parent = this.originalArray;
+
+        while (parent.firstChild) {
+            parent.removeChild(parent.firstChild)
         }
-        else{
-            this.sortBtn.setAttribute('disabled',true);
+
+        for (let i = 0; i < SET_LENGTH; i++) {
+            const listItem = document.createElement('li');
+            listItem.className = "array_cell";
+            listItem.id = i;
+            const num = Math.random() * 200;
+            listItem.style.height = num + 23 + 'px';
+            listItem.value = num;
+            this.appendTextNumber(listItem, num);
+            this.originalArray.append(listItem);
+        }
+        this.resizeArray();
+    }
+
+    createElements() {
+        let len = this.arrayCellsList.children.length;
+
+        if (this.rangeInput.value > len) {
+            for (let i = len; i < this.rangeInput.value; i++) {
+                const listItem = document.createElement('li');
+                listItem.className = "array_cell";
+                listItem.id = i;
+                const num = Math.random() * 200;
+                listItem.style.height = num + 23 + 'px';
+                listItem.value = num;
+                this.appendTextNumber(listItem, num);
+                i % 2 === 0 ? this.arrayCellsList.append(listItem) : this.arrayCellsList.prepend(listItem)
+            }
+        } else 
+            for (let i = len - 1; i >= this.rangeInput.value; i--) {
+                i % 2 === 0 ? this.arrayCellsList.removeChild(this.arrayCellsList.children[i]) : this.arrayCellsList.removeChild(this.arrayCellsList.children[0])
+            }
+        
+
+    }
+
+    beforeSort() {
+        let arr = this.arrayCellsList.children;
+        let doSort = false;
+        for (let i = 0; i < arr.length - 1; i++) {
+
+            if (arr[i].value > arr[i + 1].value) 
+                doSort = true;
+            
+        }
+
+        if (this.algorithm === undefined) {
+            alert('please choose an algorithm');
+        } else if (doSort) {
+            this.sortBtn.setAttribute('disabled', true);
             this.rangeInput.setAttribute('disabled', true);
             this.generateNewArrayBtn.setAttribute('disabled', true);
             this.generateNewArrayBtn.style.color = '#ccc';
             this.sortBtn.style.color = '#ccc'
             this.sort();
+        } else {
+            return;
         }
+
     }
 
     sort() {
@@ -102,18 +174,18 @@ class Main {
     }
 }
 
-class Shared extends Main{
+class Shared extends Main {
     array;
-    constructor(array){
+    constructor(array) {
         super();
         this.array = array;
     }
-    onDoneSort(){
-        for(let i = 0; i < this.array.length; i++){
+    onDoneSort() {
+        for (let i = 0; i < this.array.length; i++) {
             this.array[i].style.background = 'green';
         }
         this.rangeInput.removeAttribute('disabled', true);
-        this.sortBtn.removeAttribute('disabled',true);
+        this.sortBtn.removeAttribute('disabled', true);
         this.sortBtn.style.color = 'white';
         this.generateNewArrayBtn.removeAttribute('disabled', true);
         this.generateNewArrayBtn.style.color = 'white';
@@ -137,6 +209,7 @@ class Nav {
             this.main.algorithm = 'bubble-sort';
             for (let i = 0; i < this.navSortingItems.children.length; i++) 
                 this.navSortingItems.children[i].style.color = 'white';
+            
             this.bubbleSortBtn.style.color = 'red';
         });
 
@@ -145,6 +218,7 @@ class Nav {
             for (let i = 0; i < this.navSortingItems.children.length; i++) 
                 this.navSortingItems.children[i].style.color = 'white';
             
+
             this.heapSortBtn.style.color = 'red';
         });
 
@@ -153,6 +227,7 @@ class Nav {
             for (let i = 0; i < this.navSortingItems.children.length; i++) 
                 this.navSortingItems.children[i].style.color = 'white';
             
+
             this.quickSortBtn.style.color = 'red';
         });
 
@@ -161,6 +236,7 @@ class Nav {
             for (let i = 0; i < this.navSortingItems.children.length; i++) 
                 this.navSortingItems.children[i].style.color = 'white';
             
+
             this.mergeSortBtn.style.color = 'red';
         });
     }
@@ -239,7 +315,7 @@ class QuickSort {
         }
 
         this.quickSort(numbers, 0, numbers.length - 1);
-      
+
         let i = 0;
         let quickSortInterval = setInterval(() => {
             if (i >= this.j.length) {
@@ -247,10 +323,10 @@ class QuickSort {
                 clearInterval(quickSortInterval);
                 return;
             }
-            this.switchNodes(this.j[i],this.j[i + 1]);
-            i+=2;
+            this.switchNodes(this.j[i], this.j[i + 1]);
+            i += 2;
         }, 100);
-        
+
     }
 
     switchNodes(i, j) {
@@ -273,9 +349,10 @@ class QuickSort {
         if (start >= end) 
             return;
         
-        let boundry = this.partition(array,start,end);
-        this.quickSort(array,start,boundry - 1);
-        this.quickSort(array,boundry + 1, end);
+
+        let boundry = this.partition(array, start, end);
+        this.quickSort(array, start, boundry - 1);
+        this.quickSort(array, boundry + 1, end);
 
     }
 
@@ -300,7 +377,7 @@ class QuickSort {
 
 class HeapSort {
     array;
-    j1=[];
+    j1 = [];
     j2 = [];
 
     constructor(array) {
@@ -321,6 +398,7 @@ class HeapSort {
         for (let i = Math.floor(n / 2) - 1; i >= 0; i--) 
             this.heapify(array, n, i);
         
+
 
         for (let i = n - 1; i > 0; i--) {
             this.j1.push(0);
@@ -390,7 +468,7 @@ class MergeSort {
     array;
     cells;
     ms = 0;
-    
+
     constructor(array) {
         this.cells = array.children;
         this.array = Array.from(array.childNodes);
@@ -398,13 +476,13 @@ class MergeSort {
 
     sort() {
         this.mergeSort(this.array);
-    
-        for(let i = 0; i < this.cells.length; i++){
+
+        for (let i = 0; i < this.cells.length; i++) {
             this.ms += 400;
         }
         this.ms += 40;
-       
-        setTimeout(()=>{
+
+        setTimeout(() => {
             new Shared(this.cells).onDoneSort();
         }, this.ms)
     }
@@ -414,8 +492,6 @@ class MergeSort {
         if (array.length <= 1) 
             return array;
         
-
-
         let middle = Math.ceil(array.length / 2);
         // slice the array into two.
         const left = this.mergeSort(array.splice(0, middle));
@@ -454,35 +530,33 @@ class MergeSort {
     
     replaceNodes(range) {
     
-        
         //the original ul.
         let items = this.cells;
         // the id's from the range array 
         let rangeArray = [];
         //only the el with the id's which the original ul includes
         let resultArray = [];
-        let min, max;
+        let min;
         range.forEach(item => rangeArray.push(Number.parseInt(item)));
         min = rangeArray.reduce((curr, prev) => curr < prev ? curr : prev);
-        max = rangeArray.reduce((curr, prev) => curr > prev ? curr : prev);
-
+      
          
         rangeArray.map(item => {
                 for (let i = 0; i < items.length; i++) {
                     if (item == (items[i].id)) 
                         resultArray.push(items[i]);
-                    
                 }
             }) 
 
-           
-            let j = 0;  
             let i = min;
+            let j = 0;
             let interval = setInterval(() => {
-                if (i === max){
-                    clearInterval(interval);
-                }
                 
+                if (j === resultArray.length) {
+                    clearInterval(interval);
+                    return;
+                }
+
                 let index;
                 let temp = items[i].cloneNode(true);
 
@@ -502,14 +576,14 @@ class MergeSort {
 
                 items[i].parentElement.replaceChild(temp2, items[i]);
                 items[i].parentElement.replaceChild(temp, items[index]);
-
+                
                 j++;
                 i++;
+           
             }, 400)
 
-    
 
         }
 
-    
+
     }
