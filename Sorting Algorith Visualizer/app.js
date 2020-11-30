@@ -665,7 +665,20 @@ class MergeSort {
 
         let i = min;
         let j = 0;
+        let doCheck = false;
+
+         for(let i = 0; i < items.length; i++){
+             if(resultArray[i].id !== items[i].id)
+             {
+                    doCheck = true;
+                    break;
+             }
+         }
+         if(!doCheck){
+            return;
+         }
        
+
         let interval = setInterval(() => {
             if (j === resultArray.length) {
                 clearInterval(interval);
@@ -713,7 +726,7 @@ class MergeSort {
             // })
 
             j++;
-            // i++;
+            i++;
 
         }, 1500)
 
