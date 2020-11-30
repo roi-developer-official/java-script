@@ -1,23 +1,3 @@
-// setTimeOut example:
-/*
-
-    let ims  = 0;
-       let j =0;
-        while(j < numbers.length){
-            for(let i = 1; i < numbers.length; i++){
-                setTimeout(()=>{
-                    // this.array[i-1].style.border = '2px solid red';
-                    console.log(i-1);
-                    setTimeout(()=>{
-                            console.log(i);
-        
-                    },200);
-                },ims)
-                ims+=1000
-            }
-            j++;
-        }
-*/
 const SET_LENGTH = 35;
 const START_LENGTH = 4;
 class Main {
@@ -119,11 +99,11 @@ class Main {
             }
 
 
-        } else
+        } else 
             for (let i = len - 1; i >= this.rangeInput.value; i--) {
                 i % 2 === 0 ? this.arrayCellsList.removeChild(this.arrayCellsList.children[i]) : this.arrayCellsList.removeChild(this.arrayCellsList.children[0])
             }
-
+        
 
 
     }
@@ -133,9 +113,9 @@ class Main {
         let doSort = false;
         for (let i = 0; i < arr.length - 1; i++) {
 
-            if (arr[i].value > arr[i + 1].value)
+            if (arr[i].value > arr[i + 1].value) 
                 doSort = true;
-
+            
 
 
         }
@@ -218,9 +198,9 @@ class Nav {
         this.main.init();
         this.bubbleSortBtn.addEventListener('click', () => {
             this.main.algorithm = 'bubble-sort';
-            for (let i = 0; i < this.navSortingItems.children.length; i++)
+            for (let i = 0; i < this.navSortingItems.children.length; i++) 
                 this.navSortingItems.children[i].style.color = 'white';
-
+            
 
 
             this.bubbleSortBtn.style.color = 'red';
@@ -228,9 +208,9 @@ class Nav {
 
         this.heapSortBtn.addEventListener('click', () => {
             this.main.algorithm = 'heap-sort';
-            for (let i = 0; i < this.navSortingItems.children.length; i++)
+            for (let i = 0; i < this.navSortingItems.children.length; i++) 
                 this.navSortingItems.children[i].style.color = 'white';
-
+            
 
 
             this.heapSortBtn.style.color = 'red';
@@ -238,9 +218,9 @@ class Nav {
 
         this.quickSortBtn.addEventListener('click', () => {
             this.main.algorithm = 'quick-sort';
-            for (let i = 0; i < this.navSortingItems.children.length; i++)
+            for (let i = 0; i < this.navSortingItems.children.length; i++) 
                 this.navSortingItems.children[i].style.color = 'white';
-
+            
 
 
             this.quickSortBtn.style.color = 'red';
@@ -248,9 +228,9 @@ class Nav {
 
         this.mergeSortBtn.addEventListener('click', () => {
             this.main.algorithm = 'merge-sort';
-            for (let i = 0; i < this.navSortingItems.children.length; i++)
+            for (let i = 0; i < this.navSortingItems.children.length; i++) 
                 this.navSortingItems.children[i].style.color = 'white';
-
+            
 
 
             this.mergeSortBtn.style.color = 'red';
@@ -374,9 +354,9 @@ class QuickSort {
     }
 
     quickSort(array, start, end) {
-        if (start >= end)
+        if (start >= end) 
             return;
-
+        
 
 
         let boundry = this.partition(array, start, end);
@@ -424,9 +404,9 @@ class HeapSort {
 
     heapSort(array) {
         let n = this.array.length;
-        for (let i = Math.floor(n / 2) - 1; i >= 0; i--)
+        for (let i = Math.floor(n / 2) - 1; i >= 0; i--) 
             this.heapify(array, n, i);
-
+        
 
 
         for (let i = n - 1; i > 0; i--) {
@@ -457,14 +437,14 @@ class HeapSort {
         let l = 2 * i + 1;
         let r = 2 * i + 2;
 
-        if (l < n && array[l] > array[largest])
+        if (l < n && array[l] > array[largest]) 
             largest = l;
+        
 
 
-
-        if (r < n && array[r] > array[largest])
+        if (r < n && array[r] > array[largest]) 
             largest = r;
-
+        
 
 
         if (largest != i) {
@@ -528,11 +508,7 @@ class MergeSort {
     sort() {
         this.mergeSort(this.array);
 
-        for (let i = 0; i < this.cells.length; i++) {
-            this.ms += 400;
-        }
-        this.ms += 40;
-
+        this.ms = (150 * this.cells.length) + 40;
         setTimeout(() => {
             new Shared(this.cells).onDoneSort();
         }, this.ms)
@@ -540,7 +516,7 @@ class MergeSort {
 
     mergeSort(array) {
 
-        if (array.length <= 1)
+        if (array.length<= 1)
             return array;
 
 
@@ -560,7 +536,8 @@ class MergeSort {
         while (i < left.length && j < right.length) {
             if (left[i].value < right[j].value) {
                 resultArray.push(left[i++]);
-            } else {
+            }
+             else {
                 resultArray.push(right[j++]);
             }
         }
@@ -651,7 +628,10 @@ class MergeSort {
         let resultArray = [];
         let min;
         range.forEach(item => rangeArray.push(Number.parseInt(item)));
-        min = rangeArray.reduce((curr, prev) => curr < prev ? curr : prev)
+        min = rangeArray.reduce((curr, prev) => curr < prev ? curr : prev);
+        // max = rangeArray.reduce((curr, prev) => curr > prev ? curr : prev);
+
+
 
 
         rangeArray.map(item => {
@@ -660,78 +640,201 @@ class MergeSort {
                     resultArray.push(items[i]);
             }
         })
-
-
+        
 
         let i = min;
         let j = 0;
-        let doCheck = false;
 
-         for(let i = 0; i < items.length; i++){
-             if(resultArray[i].id !== items[i].id)
-             {
-                    doCheck = true;
-                    break;
-             }
-         }
-         if(!doCheck){
-            return;
-         }
-       
 
         let interval = setInterval(() => {
-            if (j === resultArray.length) {
-                clearInterval(interval);
-                return;
-            }
+            if (j >= resultArray.length) {
+                                clearInterval(interval);
+                                return;
+                            }
 
-            let index;
-            let temp = items[i].cloneNode(true);
 
-            console.log('j',j);
+                            let index;
+                            for (let k = 0; k < items.length; k++) {
+                                if (items[k].id == resultArray[j].id) {
+                                    index = k;
+                                    break;
+                                }
+                            }
 
-            for (let k = 0; k < items.length; k++) {
-                if (items[k].id == resultArray[j].id) {
-                    index = k;
-                    break;
+                            if(items[i].id !== items[index].id){
+                                let temp = items[i].cloneNode(true);
+                                let elIPos = items[index].getBoundingClientRect().left;
+                                let elJPos = items[i].getBoundingClientRect().left;
+                                console.log(items[i].value,items[index].value)
+
+
+                                let moveLeft = (elIPos - elJPos);
+                                items[index].style.transform = `translateX(-${moveLeft}px)`
+                                items[i].style.transform = `translateX(${moveLeft}px)`
+
+
+                                // items[i].addEventListener('transitionend', () => {
+
+                                items[index].style.transform = `translateX(0)`
+                                items[i].style.transform = `translateX(0)`
+
+                                    let temp2 = resultArray[j].cloneNode(true);
+                                    items[i].parentElement.replaceChild(temp2, items[i]);
+                                    items[i].parentElement.replaceChild(temp, items[index]);
+
+                                // });
+                            }
+
+                            j++;
+                            i++;
+
+                        }, 150)
+                    }
+
+         
+           
+
+
                 }
+
+            // replaceNodes(range) { // the original ul.
+
+            //     let j1= [];
+            //     let items = this.cells;
+            //     // the id's from the range array
+            //     let rangeArray = [];
+            //     // only the el with the id's which the original ul includes
+            //     let resultArray = [];
+            //     let min,
+            //         max;
+            //     range.forEach(item => rangeArray.push(Number.parseInt(item)));
+            //     min = rangeArray.reduce((curr, prev) => curr<prev ? curr : prev);
+            //     max = rangeArray.reduce((curr, prev) => curr > prev ? curr : prev);
+
+            //     rangeArray.map(item => {
+            //         for (let i = 0; i < items.length; i++) {
+            //             if (item == items[i].id) 
+            //                 resultArray.push(items[i]);
+                        
+
+
+            //         }
+            //     });
+
+
+            //     let j = 0;
+    
+            //     let ms = 0;
+            //     // let interval;
+            //     for (let i = min; i <= max; i++) { 
+            //         // the items which need's to be replaced.
+                    
+            //         if (items[i].id !== resultArray[j].id) {
+            //             for (let k = 0; k < items.length; k++) {
+            //                 // the items which will need's to replace.
+            //                 if (items[k].id == resultArray[j].id) {
+            //                         j1.push(k);
+            //                         j1.push(i);
+            //                     // this.switchNodes(i,j);
+                          
+                        
+            //                             // let temp  = items[i].cloneNode(true);
+            //                             // let temp2 = items[k].cloneNode(true);
+    
+            //                             // items[i].parentElement.replaceChild(temp, items[k]);
+            //                             // items[i].parentElement.replaceChild(temp2, items[i]);
+                                   
+                              
+
+            //                     break;
+            //                 }
+            //             }
+            //         }
+            //         j++;
+            //     }
+
+            //     let i = 0;
+            //     let interval = setInterval(()=>{
+            //      if(i >= j1.length){
+            //                 clearInterval(interval);
+            //                 return;
+            //             }
+
+            //         let temp  = items[j1[i+1]].cloneNode(true);
+            //         let temp2 = items[j1[i]].cloneNode(true);
+
+            //         items[0].parentElement.replaceChild(temp, items[j1[i]]);
+            //         items[0].parentElement.replaceChild(temp2, items[j1[i+1]]);
+
+            //         i+=2;
+            //     },200)
+            // }
+
+
+        //     animate(j1){
+
+        //        let i = 0;
+        //         let interval = setInterval(() => {
+        //             if (i >= j1.length) {
+        //                 clearInterval(interval);
+        //                 return;
+        //             }
+        //             this.switchNodes(j1[i], j1[i+1])
+
+        //             i+=2;
+
+        //         }, 1000)
+
+
+        //     }
+
+        //     switchNodes(i, j) {
+                
+        //         let temp  = this.cells[i].cloneNode(true);
+        //         let temp2 = this.cells[j].cloneNode(true);
+
+        //         this.cells[i].parentElement.replaceChild(temp, this.cells[j]);
+        //         this.cells[i].parentElement.replaceChild(temp2, this.cells[i]);
+          
+              
+        //             let elIPos = this.cells[j].getBoundingClientRect().left;
+        //             let elJPos = this.cells[i].getBoundingClientRect().left;
+        //             let moveLeft = (elIPos - elJPos);
+
+
+        //             // this.cells[i].style.transform = `translateX(${moveLeft}px)`
+        //             // this.cells[j].style.transform = `translateX(-${moveLeft}px)`
+    
+    
+        //             // // this.cells[j].addEventListener('transitionend', () => {
+        //             //     this.cells[i].style.transform = `translateX(0)`
+        //             //     this.cells[j].style.transform = `translateX(0)`
+          
+ 
+              
+        //         // })
+
+        //     }
+
+
+        // }
+        // setTimeOut example:
+        /*
+
+    let ims  = 0;
+       let j =0;
+        while(j < numbers.length){
+            for(let i = 1; i < numbers.length; i++){
+                setTimeout(()=>{
+                    // this.array[i-1].style.border = '2px solid red';
+                    console.log(i-1);
+                    setTimeout(()=>{
+                            console.log(i);
+        
+                    },200);
+                },ims)
+                ims+=1000
             }
-
-
-            let temp2 = resultArray[j].cloneNode(true);
-            items[i].parentElement.replaceChild(temp2, items[i]);
-            items[i].parentElement.replaceChild(temp, items[index]);
-     
-
-            // console.log(items[index])
-            // console.log(index);
-
-            // let elIPos = items[i].getBoundingClientRect().left;
-            // let elJPos = items[index].getBoundingClientRect().left;
-
-            // let moveLeft = (elIPos - elJPos);
-            // items[i].style.transform = `translateX(-${moveLeft}px)`
-            // items[index].style.transform = `translateX(${moveLeft}px)`
-
-
-            // items[index].addEventListener('transitionend', () => {
-
-            //     items[i].style.transform = `translateX(0)`
-            //     items[index].style.transform = `translateX(0)`
-
-            //     let temp2 = resultArray[j].cloneNode(true);
-            //     items[i].parentElement.replaceChild(temp2, items[i]);
-            //     items[i].parentElement.replaceChild(temp, items[index]);
-
-            // })
-
             j++;
-            i++;
-
-        }, 1500)
-
-
-    }
-
-
-}
+        }
+*/
