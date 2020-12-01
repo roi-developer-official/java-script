@@ -496,30 +496,42 @@ class HeapSort {
 
 
 class MergeSort {
-    array;
-    cells;
-    ms = 0;
+        array;
+        cells;
+        ms = 0;
+        indexes = [];
+        constructor(array) {
+            this.cells = array.children;
+            this.array = Array.from(array.childNodes);
+        }
 
-    constructor(array) {
-        this.cells = array.children;
-        this.array = Array.from(array.childNodes);
-    }
+        sort() {
+            this.mergeSort(this.array);
+            
+            console.log(this.indexes);
+            // this.ms = (150 * this.cells.length) + 40;
+            // setTimeout(() => {
+                let i = 0; 
+                let interval = setInterval(()=>{
+                    if(i >= this.indexes.length){
+                new Shared(this.cells).onDoneSort();
+                        clearInterval(interval);
+                        return;
+                    }
 
-    sort() {
-        this.mergeSort(this.array);
 
-        this.ms = (150 * this.cells.length) + 40;
-        setTimeout(() => {
-            new Shared(this.cells).onDoneSort();
-        }, this.ms)
-    }
+                    this.switchNodes(this.indexes[i], this.indexes[i+1]);
+                    i+=2;
 
-    mergeSort(array) {
+                },150)
+               
+        }
+        
 
-        if (array.length<= 1)
+        mergeSort(array) {
+
+            if (array.length<= 1)
             return array;
-
-
 
         let middle = Math.ceil(array.length / 2);
         // slice the array into two.
@@ -556,68 +568,24 @@ class MergeSort {
         return resultArray;
     }
 
+    switchNodes(i, j) {
 
-    // replaceNodes(range) { // the original ul.
-    //     let items = this.cells;
-    //     // the id's from the range array
-    //     let rangeArray = [];
-    //     // only the el with the id's which the original ul includes
-    //     let resultArray = [];
-    //     let min;
-    //     range.forEach(item => rangeArray.push(Number.parseInt(item)));
-    //     min = rangeArray.reduce((curr, prev) => curr<prev ? curr : prev);
+        let elIPos = this.cells[i].getBoundingClientRect().left;
+        let elJPos = this.cells[j].getBoundingClientRect().left;
+        let moveLeft = (elIPos - elJPos);
+        this.cells[i].style.transform = `translateX(-${moveLeft}px)`
+        this.cells[j].style.transform = `translateX(${moveLeft}px)`
 
-
-    //     rangeArray.map(item => {
-    //         for (let i = 0; i < items.length; i++) {
-    //             if (item == (items[i].id)) 
-    //                 resultArray.push(items[i]);
-
+        this.cells[j].addEventListener('transitionend', () => {
+            this.cells[i].style.transform = `translateX(0)`
+            this.cells[j].style.transform = `translateX(0)`
+            let temp = this.cells[i].cloneNode(true);
+            this.cells[i].parentNode.replaceChild(this.cells[j].cloneNode(true), this.cells[i]);
+            this.cells[j].parentNode.replaceChild(temp, this.cells[j]);
+        })
 
 
-    //         }
-    //     })
-
-    //     let i = min;
-    //     let j = 0;
-    //     let interval = setInterval(() => {
-
-    //         if (j === resultArray.length) {
-    //             clearInterval(interval);
-    //             return;
-    //         }
-
-    //         let index;
-    //         let temp = items[i].cloneNode(true);
-
-    //         for (let k = 0; k < items.length; k++) {
-    //             if (items[k].id == resultArray[j].id) {
-    //                 index = k;
-    //             }
-    //         }
-
-
-
-
-    //         let temp2 = resultArray[j].cloneNode(true);
-    //         temp.style.backgroundColor = 'rgb(20, 202, 10)';
-    //         temp2.style.backgroundColor = 'rgb(20, 202, 10)';
-    //         setTimeout(() => {
-    //             temp2.style.backgroundColor = 'darkblue';
-    //             temp.style.backgroundColor = 'darkblue';
-    //         }, 20);
-
-    //         items[i].parentElement.replaceChild(temp2, items[i]);
-    //         items[i].parentElement.replaceChild(temp, items[index]);
-
-    //         j++;
-    //         i++;
-
-    //     }, 400)
-
-
-    // }
-
+    }
 
     replaceNodes(range) { 
         // the original ul.
@@ -629,212 +597,73 @@ class MergeSort {
         let min;
         range.forEach(item => rangeArray.push(Number.parseInt(item)));
         min = rangeArray.reduce((curr, prev) => curr < prev ? curr : prev);
-        // max = rangeArray.reduce((curr, prev) => curr > prev ? curr : prev);
-
-
-
+       
 
         rangeArray.map(item => {
             for (let i = 0; i < items.length; i++) {
                 if (item == items[i].id)
-                    resultArray.push(items[i]);
+                    resultArray.push(items[i].cloneNode(true));
             }
         })
-        
 
         let i = min;
         let j = 0;
-
-
         let interval = setInterval(() => {
-            if (j >= resultArray.length) {
-                                clearInterval(interval);
-                                return;
-                            }
-
-
-                            let index;
-                            for (let k = 0; k < items.length; k++) {
-                                if (items[k].id == resultArray[j].id) {
-                                    index = k;
-                                    break;
-                                }
-                            }
-
-                            if(items[i].id !== items[index].id){
-                                let temp = items[i].cloneNode(true);
-                                let elIPos = items[index].getBoundingClientRect().left;
-                                let elJPos = items[i].getBoundingClientRect().left;
-                                console.log(items[i].value,items[index].value)
-
-
-                                let moveLeft = (elIPos - elJPos);
-                                items[index].style.transform = `translateX(-${moveLeft}px)`
-                                items[i].style.transform = `translateX(${moveLeft}px)`
-
-
-                                // items[i].addEventListener('transitionend', () => {
-
-                                items[index].style.transform = `translateX(0)`
-                                items[i].style.transform = `translateX(0)`
-
-                                    let temp2 = resultArray[j].cloneNode(true);
-                                    items[i].parentElement.replaceChild(temp2, items[i]);
-                                    items[i].parentElement.replaceChild(temp, items[index]);
-
-                                // });
-                            }
-
-                            j++;
-                            i++;
-
-                        }, 150)
+                    if (j >= resultArray.length) {
+                        clearInterval(interval);
+                        return;
                     }
-
-         
-           
-
-
-                }
-
-            // replaceNodes(range) { // the original ul.
-
-            //     let j1= [];
-            //     let items = this.cells;
-            //     // the id's from the range array
-            //     let rangeArray = [];
-            //     // only the el with the id's which the original ul includes
-            //     let resultArray = [];
-            //     let min,
-            //         max;
-            //     range.forEach(item => rangeArray.push(Number.parseInt(item)));
-            //     min = rangeArray.reduce((curr, prev) => curr<prev ? curr : prev);
-            //     max = rangeArray.reduce((curr, prev) => curr > prev ? curr : prev);
-
-            //     rangeArray.map(item => {
-            //         for (let i = 0; i < items.length; i++) {
-            //             if (item == items[i].id) 
-            //                 resultArray.push(items[i]);
-                        
-
-
-            //         }
-            //     });
-
-
-            //     let j = 0;
-    
-            //     let ms = 0;
-            //     // let interval;
-            //     for (let i = min; i <= max; i++) { 
-            //         // the items which need's to be replaced.
-                    
-            //         if (items[i].id !== resultArray[j].id) {
-            //             for (let k = 0; k < items.length; k++) {
-            //                 // the items which will need's to replace.
-            //                 if (items[k].id == resultArray[j].id) {
-            //                         j1.push(k);
-            //                         j1.push(i);
-            //                     // this.switchNodes(i,j);
-                          
-                        
-            //                             // let temp  = items[i].cloneNode(true);
-            //                             // let temp2 = items[k].cloneNode(true);
-    
-            //                             // items[i].parentElement.replaceChild(temp, items[k]);
-            //                             // items[i].parentElement.replaceChild(temp2, items[i]);
-                                   
-                              
-
-            //                     break;
-            //                 }
-            //             }
-            //         }
-            //         j++;
-            //     }
-
-            //     let i = 0;
-            //     let interval = setInterval(()=>{
-            //      if(i >= j1.length){
-            //                 clearInterval(interval);
-            //                 return;
-            //             }
-
-            //         let temp  = items[j1[i+1]].cloneNode(true);
-            //         let temp2 = items[j1[i]].cloneNode(true);
-
-            //         items[0].parentElement.replaceChild(temp, items[j1[i]]);
-            //         items[0].parentElement.replaceChild(temp2, items[j1[i+1]]);
-
-            //         i+=2;
-            //     },200)
-            // }
-
-
-        //     animate(j1){
-
-        //        let i = 0;
-        //         let interval = setInterval(() => {
-        //             if (i >= j1.length) {
-        //                 clearInterval(interval);
-        //                 return;
-        //             }
-        //             this.switchNodes(j1[i], j1[i+1])
-
-        //             i+=2;
-
-        //         }, 1000)
-
-
-        //     }
-
-        //     switchNodes(i, j) {
-                
-        //         let temp  = this.cells[i].cloneNode(true);
-        //         let temp2 = this.cells[j].cloneNode(true);
-
-        //         this.cells[i].parentElement.replaceChild(temp, this.cells[j]);
-        //         this.cells[i].parentElement.replaceChild(temp2, this.cells[i]);
-          
-              
-        //             let elIPos = this.cells[j].getBoundingClientRect().left;
-        //             let elJPos = this.cells[i].getBoundingClientRect().left;
-        //             let moveLeft = (elIPos - elJPos);
-
-
-        //             // this.cells[i].style.transform = `translateX(${moveLeft}px)`
-        //             // this.cells[j].style.transform = `translateX(-${moveLeft}px)`
-    
-    
-        //             // // this.cells[j].addEventListener('transitionend', () => {
-        //             //     this.cells[i].style.transform = `translateX(0)`
-        //             //     this.cells[j].style.transform = `translateX(0)`
-          
- 
-              
-        //         // })
-
-        //     }
-
-
-        // }
-        // setTimeOut example:
-        /*
-
-    let ims  = 0;
-       let j =0;
-        while(j < numbers.length){
-            for(let i = 1; i < numbers.length; i++){
-                setTimeout(()=>{
-                    // this.array[i-1].style.border = '2px solid red';
-                    console.log(i-1);
-                    setTimeout(()=>{
-                            console.log(i);
+                    let index;
+                    for (let k = 0; k < items.length; k++) {
+                        if (items[k].id == resultArray[j].id) {
+                            index = k;
+                            break;
+                        }
+                    }
         
-                    },200);
-                },ims)
-                ims+=1000
-            }
-            j++;
-        }
-*/
+                    if (items[i].id !== items[index].id) {
+                     
+                        this.indexes.push(index);
+                        this.indexes.push(i);
+        
+        
+                        let temp = items[i].id;
+                        items[i].id = items[index].id;
+                        items[index].id = temp;
+        
+                    }
+                    j++;
+                    i++;
+                },
+                0);
+
+        
+
+        // let i = min;
+        // let j = 0;
+        // while(j < resultArray.length){
+        //     let index;
+        //     for (let k = 0; k < items.length; k++) {
+        //         if (items[k].id == resultArray[j].id) {
+        //             index = k;
+        //             break;
+        //         }
+        //     }
+
+        //     if (items[i].id !== items[index].id) {
+        //         this.indexes.push(index);
+        //         this.indexes.push(i);
+
+        //         let temp = items[i].id;
+        //         items[i].id = items[index].id;
+        //         items[index].id = temp;
+
+        //     }
+        //     j++;
+        //     i++;
+        // }
+        
+ }
+
+}
+// setTimeOut example:/*// let ims = 0;// let j = 0;// while (j < numbers.length) {//     for (let i = 1; i < numbers.length; i++) {//         setTimeout(() => { // this.array[i-1].style.border = '2px solid red';//             console.log(i - 1);//             setTimeout(() => {//                 console.log(i);//             }, 200);//         }, ims)//         ims += 1000//     }//     j ++;// } * /
