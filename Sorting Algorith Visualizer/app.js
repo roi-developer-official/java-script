@@ -64,22 +64,7 @@ class Main {
             this.arrayCellsList.children[i].id = i;
         }
     }
-    
-    // resizeArray() {
 
-    //     let parent = this.arrayCellsList;
-    //     while (parent.firstChild) {
-    //         parent.firstChild.remove();
-    //     }
-
-    //     for (let i = 0; i < this.rangeInput.value; i++) {
-    //         let temp = this.originalArray.children[i].cloneNode(true);
-    //         i % 2 === 0 ? this.arrayCellsList.append(temp) : this.arrayCellsList.prepend(temp)
-    //     }
-    //     for (let i = 0; i < this.arrayCellsList.children.length; i++) {
-    //         this.arrayCellsList.children[i].id = i;
-    //     }
-    // }
 
     genrerateNewArray() {
         let parent = this.originalArray;
@@ -134,15 +119,10 @@ class Main {
     beforeSort() {
         let arr = this.arrayCellsList.children;
         let doSort = false;
-        for (let i = 0; i < arr.length - 1; i++) {
-
+        for (let i = 0; i < arr.length - 1; i++) 
             if (arr[i].value > arr[i + 1].value) 
                 doSort = true;
-            
-
-
-        }
-
+           
         if (this.algorithm === undefined) {
             alert('please choose an algorithm');
         } else if (doSort) {
@@ -152,7 +132,8 @@ class Main {
             this.generateNewArrayBtn.style.color = '#ccc';
             this.sortBtn.style.color = '#ccc'
             this.sort();
-        } else {
+        } 
+        else {
             return;
         }
 
