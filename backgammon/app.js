@@ -19,6 +19,8 @@ class Board {
     dragged = null;
     dropped =  null;
     isEaten = false;
+    isDouble  = false;
+    countMove = 0;
     
 
     init(){
@@ -91,12 +93,22 @@ class Board {
 
     genrateRandomNumbers(){
         this.num1 = Math.floor(Math.random() * 6 + 1);
+       
         this.diceDivs.children[0].src = `./images/${this.num1}-dice.svg` ;
         this.diceDivs.children[0].style.visibility = 'visible';
 
         this.num2 = Math.floor(Math.random() * 6 + 1);
+        
         this.diceDivs.children[1].src = `./images/${this.num2}-dice.svg` ;
         this.diceDivs.children[1].style.visibility = 'visible';
+        
+
+        if(this.num1 === this.num2){
+            this.isDouble = true
+        }
+        else 
+            this.isDouble = false;
+            
 
     }
 
@@ -126,6 +138,8 @@ class Board {
         const dragged = +this.dragged.id;
         const isLeftmove = dropped <= dragged;
         let isBlack = this.dropped.children;
+
+        //check if the move is currect with the dice number
         const isDice = (dragged - dropped) === this.num1 || (dragged - dropped) === this.num2;
 
         if(isBlack[0] && isBlack[0].classList[1] === 'black-tool' && isBlack.length > 1){
@@ -142,14 +156,27 @@ class Board {
         }
 
         //no moves after player movement.
-        if(dragged - dropped === this.num1){
-            this.num1 = null;
-        }
-        else if(dragged - dropped === this.num2){
-            this.num2 = null;
-        }
+        if(this.isDouble){
+            if(dragged - dropped === this.num1 || dragged - dropped === this.num2)
+                  this.countMove++;
 
-
+            if(this.countMove === 4){
+                this.countMove = 0;
+                this.num1 = null;
+                this.num2 = null;
+            }
+          
+        }
+        else{
+            if(dragged - dropped === this.num1 ){
+                this.num1 = null;
+            }
+            else if(dragged - dropped === this.num2){
+                this.num2 = null;
+            }
+        }
+        
+        //if the player finished switch turn
         if(this.num1 === null && this.num2 === null){
             this.genrateRandomNumbers();
             this.opponentMove();
@@ -158,24 +185,7 @@ class Board {
     }
 
     opponentMove(){
-        
-        let blackCols =[];
-        let whiteCols =[];
-        let onesArray =[];
-       
-        
-        //find all the black cols;
-        for(let i = 0; i < this.cols.length; i++){
-         
-             if(this.cols[i].children[0] && this.cols[i].children[0].classList[1] === 'white-tool'){
-                whiteCols.push(this.cols[i])
-            }
-        }
-        //order the array by id
-        blackCols = blackCols.sort((a,b)=>a.id - b.id);
-
         this.chackforEmpty();
-
 
        
         }
@@ -200,30 +210,21 @@ class Board {
             }
         }
         return emptyCols.sort((a,b)=>a.id - b.id)
-
     }
 
-
-
     handleOppenentMovment (){
-
         let tool = this.createTool('black');
         this.dragged.removeChild(this.dragged.children[0]);
         this.dropped.appendChild(tool)
 
-
     }
-
-
-
-    
 
     chackforEmpty(){
         let emptyCols = this.getEmptyAndBlackCols();
         let blackCols = this.getBlackCols();
+
     
         for(let i = 0; i < blackCols.length && this.num1; i++){
-
             let blackPos = +blackCols[i].id;
             let destiny = blackPos + this.num1;
             console.log(destiny);
@@ -232,11 +233,12 @@ class Board {
             if(emptyCol){
                 this.dragged = this.getColById(blackCols, blackPos);
                 this.dropped = emptyCol;
-                this.num1 = null;
+                if(!this.isDouble)
+                   this.num1 = null;
             }
             
         }
-
+        
         this.handleOppenentMovment();
         blackCols = this.getBlackCols();
         for(let i = 0; i < blackCols.length && this.num2; i++){
@@ -248,7 +250,8 @@ class Board {
             if(emptyCol){
                 this.dragged = this.getColById(blackCols, blackPos);
                 this.dropped = emptyCol;
-                this.num2 = null;
+                if(!this.isDouble)
+                   this.num2 = null;
             }
             
         }
@@ -267,9 +270,17 @@ class Board {
                     this.dropped = emptyCol;
                     this.num1 = null;
                 }
-                
             }
         }
+
+        if(this.isDouble){
+            this.isDouble = false;
+            this.num1 = null;
+            this.num2 = null;
+            this.chackforEmpty();
+        }
+
+    
     }
 
 
