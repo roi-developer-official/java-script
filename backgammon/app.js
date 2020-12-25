@@ -1,5 +1,13 @@
 
-class Board{
+
+
+
+
+
+
+
+
+class Board {
     board = document.querySelector('.board');
     container = document.querySelector('.container');
     cols = this.container.querySelectorAll('div ul');
@@ -99,10 +107,6 @@ class Board{
         }
     }
 
-    testMove(){
-
-    }
-
     createTool(color){
         let tool = document.createElement('li');
         tool.style.backgroundColor = color;
@@ -131,7 +135,6 @@ class Board{
             isBlack = false;
         }
 
-
         if(isLeftmove && !isBlack && isDice){
                 let tool = this.createTool('green');
                 this.dragged.removeChild(this.dragged.children[0]);
@@ -146,11 +149,145 @@ class Board{
             this.num2 = null;
         }
 
-      
+
+        if(this.num1 === null && this.num2 === null){
+            this.genrateRandomNumbers();
+            this.opponentMove();
+        }
+
+    }
+
+    opponentMove(){
+        
+        let blackCols =[];
+        let whiteCols =[];
+        let onesArray =[];
+       
+        
+        //find all the black cols;
+        for(let i = 0; i < this.cols.length; i++){
+         
+             if(this.cols[i].children[0] && this.cols[i].children[0].classList[1] === 'white-tool'){
+                whiteCols.push(this.cols[i])
+            }
+        }
+        //order the array by id
+        blackCols = blackCols.sort((a,b)=>a.id - b.id);
+
+        this.chackforEmpty();
+
+
+       
+        }
+
+
+    getBlackCols(){
+        let blackCols = [];
+        for(let i = 0; i < this.cols.length; i++){
+            if(this.cols[i].children[0] && this.cols[i].children[0].classList[1] === 'black-tool'){
+                blackCols.push(this.cols[i]) 
+            }
+        }
+        return blackCols.sort((a,b)=>a.id - b.id);
+    }
+
+    getEmptyAndBlackCols(){
+        let emptyCols = [];
+        for(let i = 0; i < this.cols.length; i++){
+            if(this.cols[i].children.length === 0 || 
+                this.cols[i].children[0].classList[1] === 'black-tool'){
+                emptyCols.push(this.cols[i])
+            }
+        }
+        return emptyCols.sort((a,b)=>a.id - b.id)
+
+    }
+
+
+
+    handleOppenentMovment (){
+
+        let tool = this.createTool('black');
+        this.dragged.removeChild(this.dragged.children[0]);
+        this.dropped.appendChild(tool)
+
+
+    }
+
+
+
     
+
+    chackforEmpty(){
+        let emptyCols = this.getEmptyAndBlackCols();
+        let blackCols = this.getBlackCols();
+    
+        for(let i = 0; i < blackCols.length && this.num1; i++){
+
+            let blackPos = +blackCols[i].id;
+            let destiny = blackPos + this.num1;
+            console.log(destiny);
+            let emptyCol = this.getColById(emptyCols,destiny);
+    
+            if(emptyCol){
+                this.dragged = this.getColById(blackCols, blackPos);
+                this.dropped = emptyCol;
+                this.num1 = null;
+            }
+            
+        }
+
+        this.handleOppenentMovment();
+        blackCols = this.getBlackCols();
+        for(let i = 0; i < blackCols.length && this.num2; i++){
+            let blackPos = +blackCols[i].id;
+            let destiny = blackPos + this.num2;
+            console.log(destiny);
+            let emptyCol = this.getColById(emptyCols,destiny);
+            
+            if(emptyCol){
+                this.dragged = this.getColById(blackCols, blackPos);
+                this.dropped = emptyCol;
+                this.num2 = null;
+            }
+            
+        }
+        
+        this.handleOppenentMovment();
+        blackCols = this.getBlackCols();
+        if(this.num1){
+            for(let i = 0; i < blackCols.length && this.num1; i++){
+                let blackPos = +blackCols[i].id;
+                let destiny = blackPos + this.num1;
+                console.log(destiny);
+                let emptyCol = this.getColById(emptyCols,destiny);
+        
+                if(emptyCol){
+                    this.dragged = this.getColById(blackCols, blackPos);
+                    this.dropped = emptyCol;
+                    this.num1 = null;
+                }
+                
+            }
+        }
+    }
+
+
+
+    getColById(array,id){
+      
+        for(let i = 0; i < array.length; i++){
+            if(+array[i].id === id){
+                return array[i];
+            }
+        }
+
+        return null;
+       
     }
 
 }
+
 
 
 
