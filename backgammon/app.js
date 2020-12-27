@@ -7,7 +7,6 @@ class Board {
     eateanConteiner = document.querySelector('.eaten-container');
     num1 = null;
     num2 = null;
-    numbers =[];
     tools = null;
     dragged = null;
     dropped =  null;
@@ -15,6 +14,7 @@ class Board {
     oppenentEatenCount = 0;
     isDouble  = false;
     countMove = 0;
+    playerTurn = false;
     
 
     init(){
@@ -33,7 +33,6 @@ class Board {
             e.preventDefault()
         });
      
-
         this.cols.forEach(col=>{
             col.addEventListener('dragover', (e)=>{
       
@@ -44,11 +43,27 @@ class Board {
             col.addEventListener('drop', (e)=>{
                 e.preventDefault();
                 this.dropped = col;
-                this.handleDragAndDrop();    
+                this.handlePlayerMovment();
             });
         })
-      
     }
+
+
+    handlePlayerMovment(){
+        let validate;
+        if(this.playerEatenCount){
+            validate = this.validatePlayerMoveWhenEaten();
+            if(validate)
+             this.handleDragAndDropWhileEaten();
+        }
+        else{
+            validate = this.validatePlayerMove();
+            if(validate)
+                this.handleDragAndDrop(); 
+        }
+        
+    }
+
 
     initCols(){
             this.cols.forEach(col=>{
@@ -59,27 +74,82 @@ class Board {
                     case 1:
                         this.fillCols(2,col,'black');
                         break;
-                    case 6:
-                        this.fillCols(5,col,'green')
-                        break;
+                    case 2: 
+                    this.fillCols(2,col, 'black')
+                    break;
+
+                    case 3: 
+                    this.fillCols(2,col,'black')
+                    break;
+
+                    case 4: 
+                    this.fillCols(2,col,'black')
+                    break;
+
+                    case 5: 
+                    this.fillCols(2,col,'black')
+                    break;
+
+                    case 7: 
+                    this.fillCols(2,col,'black')
+                    break;
+
+                    case 9: 
+                    this.fillCols(2,col,'black')
+                    break;
+
+                    case 10: 
+                    this.fillCols(2,col,'black')
+                    break;
+
+                    case 11: 
+                    this.fillCols(2,col,'black')
+                    break;
+
+                    case 16: 
+                    this.fillCols(2,col,'black')
+                    break;
+                    case 15: 
+                    this.fillCols(2,col,'black')
+                    break;
+                    // case 14:
+                    //     this.fillCols(5,col,'green')
+                    //     break;
                     case 8: 
                       this.fillCols(3,col, 'green');
                       break;
                     case 12:
                         this.fillCols(5,col,'black');
                         break;
-                    case 13:
-                        this.fillCols(5,col, 'green');
-                        break;
+                    // case 13:
+                    //     this.fillCols(5,col, 'green');
+                    //     break;
                     case 17:
                         this.fillCols(3,col,'black')
                         break;
                     case 19:
                         this.fillCols(5,col,'black');
                         break;
-                    case 24:
-                        this.fillCols(2,col,'green');
-                        break;
+                    
+                        case 20: 
+                            this.fillCols(2,col, 'black')
+                            break;
+                        case 21: 
+                            this.fillCols(2,col, 'black')
+                            break;
+                        // case 22: 
+                        //     this.fillCols(2,col, 'black')
+                        //     break;
+                        case 23: 
+                            this.fillCols(2,col, 'black')
+                            break;
+                        case 24: 
+                            this.fillCols(2,col, 'black')
+                            break;
+
+                    // case 24:
+                    //     this.fillCols(2,col,'green');
+                    //     break;
                     default :break;
                 }
             })
@@ -95,15 +165,40 @@ class Board {
     
         this.diceDivs.children[1].src = `./images/${this.num2}-dice.svg` ;
         this.diceDivs.children[1].style.visibility = 'visible';
-        this.num1 = 4;
-        this.num2 = 4;
+   
+        this.playerTurn = !this.playerTurn;
+
+        console.log(this.playerTurn);
+        if(this.playerTurn)
+        {
+            if(this.playerEatenCount){
+               //if there is no action for the player while eaten
+                if(!this.checkForNoActionOnEatenPlayer()){
+                    setTimeout(()=>{
+                   this.switchTurn()
+                    },300)
+                }
+            }
+            else{
+                //if there is no action for the player
+                //check with first number
+                if(!this.checkForNoActionOnPlayer(this.num1)){
+                    //if no action with first number check for second number
+                    if(!this.checkForNoActionOnPlayer(this.num2))
+                        setTimeout(()=>{
+                                this.switchTurn();
+                        },300)
+                }  
+         
+            }
+        }
+
         if(this.num1 === this.num2){
             this.isDouble = true
         }
         else 
             this.isDouble = false;
     }
-
 
     fillCols(number,col, color){
         for(let i = 0; i < number ; i++){
@@ -126,31 +221,167 @@ class Board {
         return tool;
     }
 
-    handleDragAndDrop(){
+    validatePlayerMove(){
         const dropped = +this.dropped.id;
         const dragged = +this.dragged.id;
         const isLeftmove = dropped <= dragged;
         let isBlack = this.dropped.children;
-     
+
         //check if the move is currect with the dice number
         const isDice = (dragged - dropped) === this.num1 || (dragged - dropped) === this.num2;
 
-        if(isBlack[0] && isBlack[0].classList[1] === 'black-tool' && isBlack.length > 1){
+        if((isBlack[0] && isBlack[0].classList[1] === 'black-tool' && isBlack.length > 1)){
             isBlack = true;
         }
         else{
             isBlack = false;
         }
+
+        if(isLeftmove && !isBlack && isDice){
+            return true;
+        }
+        return false;
+    }
+
+    validatePlayerMoveWhenEaten(){
+        const dropped = +this.dropped.id;
+        let empty;
+        let white;
+        let oneBlack;
+        let col = this.getColById(this.cols,dropped);
+
+
+        empty = col.children.length === 0;
+        white = !empty && col.children[0].classList[1] === 'white-tool';
+        oneBlack = !empty && col.children[0].classList[1] === 'black-tool' && col.children.length === 1;
+
+        if((empty || white || oneBlack) && dropped > 18){
+            return true;
+        }
+        return false;
+    }
+
+    checkForNoActionOnPlayer(num){
+       
+        let cols = this.getEmptyAndWhiteCols();
+        let whiteCols = cols.filter(col=>col.children.length > 0 && col.children[0].classList[1] === 'white-tool');
+ 
+    
+        for(let i = 0; i < whiteCols.length; i++){
+            let whitePos = +whiteCols[i].id;
+            console.log(whitePos);
+            let isEmpty = cols.filter(col=>+col.id === (whitePos - num));
       
-   
+            if(isEmpty.length){
+                return true;
+            } 
+      
+        }
+        return false;
+    }
+
+    checkForNoActionOnEatenPlayer(){
+        let cols = this.getEmptyAndWhiteCols();
+        cols = cols.filter(col=>+col.id > 18);
+
+        for(let i = 0; i < cols.length; i++){
+            let emptyPos = +cols[i].id;
+            let pos = 24 - emptyPos  +  1;
+            if(pos === this.num1 || pos === this.num2){
+                console.log(pos);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    handleDragAndDropWhileEaten(){
+        const dropped = 24 - +this.dropped.id + 1;
+
+        let num1 = this.num1;
+        let num2 = this.num2;
+     
+
+    if(dropped === this.num1 || dropped === this.num2)
+        if(this.dropped.children.length && this.dropped.children[0].classList[1] === 'black-tool'){
+            this.oppenentEatenCount++;
+            this.dropped.removeChild(this.dropped.children[0]);
+            this.addEatenToContainer('black');
+        }
+        
+        if(dropped === this.num1){
+        
+            this.countMove++;
+            this.num1 = null;
+            this.playerEatenCount--;
+            let tool = this.createTool('green');
+            this.dropped.append(tool);
+            this.removeEatenFromContainer('green');
+        }
+        else if(dropped === this.num2){
+            this.countMove++;
+            this.num2 = null;
+            this.playerEatenCount--;
+            let tool = this.createTool('green');
+            this.dropped.append(tool);
+            this.removeEatenFromContainer('green');
+        }
+
+
+        if(!this.checkForNoActionOnEatenPlayer() && this.playerEatenCount){
+            this.switchTurn();
+            this.countMove = 0;
+            return;
+        }
+
+        if(this.isDouble){
+            this.num1 = num1;
+            this.num2 = num2;
+        }
+        else if(this.countMove === 2){
+            this.countMove = 0;
+        }
+
+
+
+    }
+
+    getEmptyAndWhiteCols(){
+        let cols =[];
+
+        //or the first el is white or the col length is 1, or the col length is 0
+        for(let i = 0 ; i < this.cols.length; i++){
+            if(this.cols[i].children.length > 0 && this.cols[i].children[0].classList[1] === 'white-tool' ||
+             this.cols[i].children.length === 1 || this.cols[i].children.length === 0
+
+             ){
+                cols.push(this.cols[i])
+            }
+        }
+        return cols.sort((a,b)=>a.id - b.id);
+
+    }
+
+    switchTurn(){
+        setTimeout(()=>{
+            this.genrateRandomNumbers();
+            this.opponentMove();
+        },300)
+    }
+
+
+
+    handleDragAndDrop(){
+        const dropped = +this.dropped.id;
+        const dragged = +this.dragged.id;
+
         //handle black eaten 
          if(this.dropped && this.dropped.children.length === 1 && this.dropped.children[0].classList[1] === 'black-tool'){
             this.eatanHandler('black', this.dropped);
             this.oppenentEatenCount++;
-
         }
 
-        if(isLeftmove && !isBlack && isDice){
                 let tool = this.createTool('green');
                 this.dragged.removeChild(this.dragged.children[0]);
                 this.dropped.appendChild(tool)
@@ -175,13 +406,18 @@ class Board {
                         this.num2 = null;
                     }
                 }
-        }
 
+        if((!this.checkForNoActionOnPlayer(this.num1) || !this.checkForNoActionOnPlayer(this.num2))&&
+        !this.playerEatenCount){
+                this.switchTurn();
+                return;
         
+        }
+   
+
         //if the player finished switch turn
         if(this.num1 === null && this.num2 === null){
-            this.genrateRandomNumbers();
-            this.opponentMove();
+            this.switchTurn();
         }
 
     }
@@ -216,6 +452,16 @@ class Board {
         return emptyCols.sort((a,b)=>a.id - b.id)
     }
 
+    getWhiteOnesCols(){
+        let whiteCols = [];
+        for(let i = 0; i < this.cols.length; i++){
+            if(this.cols[i].children[0] && this.cols[i].children.length === 1 && this.cols[i].children[0].classList[1] === 'white-tool'){
+                whiteCols.push(this.cols[i]) 
+            }
+        }
+        return whiteCols;
+    }
+
 
     handleOppenentMovment (){
         let tool = this.createTool('black');
@@ -226,38 +472,65 @@ class Board {
     checkForEmptyWhenEaten(){
 
         let cols = this.getEmptyAndBlackCols();
+        let whiteCols = this.getWhiteOnesCols();
         cols = cols.filter(col=>col.id <= 6);
-       
-      
+        whiteCols = whiteCols.filter(col=>col.id <= 6);
+        
         let num1 = this.num1
         let num2 = this.num2
 
+
+        console.log(num1,num2);
+        
+    
+        //check for singles first
+        for(let i = 0; i < whiteCols.length && this.oppenentEatenCount; i++){
+            if(this.num1 === +whiteCols[i].id && this.oppenentEatenCount){
+                this.playerEatenCount++;
+                this.removeEatenFromContainer('black');
+                let blackTool = this.createTool('black');
+                let tool = this.createTool('green');
+                whiteCols[i].removeChild(whiteCols[i].children[0])
+                this.eateanConteiner.append(tool);
+                whiteCols[i].append(blackTool)
+                whiteCols = this.getWhiteOnesCols();
+                whiteCols = whiteCols.filter(col=>col.id <= 6);
+                this.oppenentEatenCount--;
+                this.num1 = null;
+            }
+            
+            else if(this.num2 === +whiteCols[i].id && this.oppenentEatenCount){
+                this.playerEatenCount++;
+                this.removeEatenFromContainer('black');
+                let blackTool = this.createTool('black');
+                let tool = this.createTool('green');
+                whiteCols[i].removeChild(whiteCols[i].children[0])
+                this.eateanConteiner.append(tool);
+                whiteCols[i].append(blackTool)
+                whiteCols = this.getWhiteOnesCols();
+                whiteCols = whiteCols.filter(col=>col.id <= 6);
+                this.oppenentEatenCount--;
+                this.num2 = null;
+        }
+
+    }   
+
+
+
+    if(this.oppenentEatenCount)
         for(let i = 0; i < cols.length; i++){
             if(this.num1 === +cols[i].id){
-                this.removeEatenFromConrainer('black');
+                this.removeEatenFromContainer('black');
                 let tool = this.createTool('black');
-                if(cols[i] && cols[i].children.length > 0 && cols[i].children[0].classList[1] === 'white-tool'){
-                    cols[i].removeChild(cols[i].children[0])
-                    let tool = this.createTool('green');
-                    this.eateanConteiner.append(tool)
-
-                }
-                cols[i].append(tool);
-                console.log(cols[i]);
+                cols[i].append(tool)
                 this.num1 = null;
                 this.oppenentEatenCount--;
                 if(this.oppenentEatenCount === 0)
                 break;
             }
             else if(this.num2 === +cols[i].id){
-                this.removeEatenFromConrainer('black');
+                this.removeEatenFromContainer('black');
                 let tool = this.createTool('black');
-                if(cols[i] && cols[i].children.length > 0 && cols[i].children[0].classList[1] === 'white-tool'){
-                    let tool = this.createTool('green');
-                    this.eateanConteiner.append(tool)
-                    cols[i].removeChild(cols[i].children[0])
-                }
-
                 cols[i].append(tool);
                 this.num2 = null;
                 this.oppenentEatenCount--;
@@ -265,6 +538,7 @@ class Board {
                  break;
             }
         }
+
 
         if(this.isDouble){
             if(this.oppenentEatenCount){
@@ -281,6 +555,7 @@ class Board {
                     this.num1 = num1;
                     this.chackforEmpty();
                     this.num1 = null;
+                    this.num2 = num2;
                     this.chackforEmpty();
                 }
                 else if(!this.num2 && this.num1){
@@ -288,6 +563,7 @@ class Board {
                     this.num2 = num2;
                     this.chackforEmpty();
                     this.num2 = null;
+                    this.num1 = num1;
                     this.chackforEmpty();
                     
                 }
@@ -314,7 +590,13 @@ class Board {
 
     }
 
-    removeEatenFromConrainer(color){
+    addEatenToContainer(color){
+        let tool = this.createTool(color)
+        this.eateanConteiner.append(tool)
+
+    }
+
+    removeEatenFromContainer(color){
         let eatens = this.eateanConteiner.children;
 
         for(let eaten of eatens){
@@ -326,13 +608,45 @@ class Board {
 
     }
 
+ 
 
     chackforEmpty(){
         let emptyCols = this.getEmptyAndBlackCols();
         let blackCols = this.getBlackCols();
+        let whiteCols = this.getWhiteOnesCols();
+        let num1 = this.num1;
+        let num2 = this.num2;
 
-        console.log(this.num1, this.num2);
-    
+
+        //ceack for singles
+        for(let i = 0; i < blackCols.length; i++){
+            let blackCol = +blackCols[i].id;
+            for(let j = 0; j < whiteCols.length; j++){
+                let whiteCol = +whiteCols[j].id
+                    if(this.num1 && blackCol + this.num1 === whiteCol){
+                        this.playerEatenCount++;
+                        this.eatanHandler('green', whiteCols[j])
+                        this.dragged = blackCols[i];
+                        this.dropped = whiteCols[j];
+                        this.handleOppenentMovment()
+                        blackCols = this.getBlackCols();
+                        this.num1 = null;    
+                    }
+                    if(this.num2 && blackCol + this.num2 === whiteCol){
+                        this.playerEatenCount++;
+                        this.eatanHandler('green', whiteCols[j])
+                        this.dragged = blackCols[i];
+                        this.dropped = whiteCols[j];
+                        this.handleOppenentMovment()
+                        blackCols = this.getBlackCols();
+                        this.num2 = null;
+                    }
+
+                }
+        } 
+
+
+
         for(let i = 0; i < blackCols.length && this.num1; i++){
             let blackPos = +blackCols[i].id;
             let destiny = blackPos + this.num1;
@@ -349,8 +663,8 @@ class Board {
                 this.dragged = this.getColById(blackCols, blackPos);
                 this.dropped = emptyCol;
                 this.handleOppenentMovment();
-                if(!this.isDouble)
-                   this.num1 = null;
+                this.num1 = null;
+                break;  
             }
             
         }
@@ -372,9 +686,9 @@ class Board {
             if(emptyCol){
                 this.dropped = emptyCol;
                 this.dragged = this.getColById(blackCols, blackPos);
+                this.num2 = null;
                 this.handleOppenentMovment();
-                if(!this.isDouble)
-                   this.num2 = null;
+                break;
             }  
         }
     
@@ -395,29 +709,29 @@ class Board {
                 if(emptyCol){
                     this.dragged = this.getColById(blackCols, blackPos);
                     this.dropped = emptyCol;
-                    this.num1 = null;
                     this.handleOppenentMovment();
+                    this.num2 = null;
+                    break;
                 }
             }
     
 
         if(this.isDouble){
             this.isDouble = false;
+            this.num1 = num1;
+            this.num2 = num2;
             this.chackforEmpty();
-            this.num1 = null;
-            this.num2 = null;
         }
     }
 
     eatanHandler(color,col){
 
         let tool = this.createTool(color);
+        console.log(col);
         col.removeChild(col.children[0])
+        console.log(col);
         this.eateanConteiner.append(tool)
-
     }
-
-  
 
 
     getColById(array,id){
