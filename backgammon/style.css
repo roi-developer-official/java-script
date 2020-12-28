@@ -28,14 +28,14 @@ body{
     justify-content: space-between;
     flex-direction: column;
 }
-.out-tools{
+.out-black-tools,.out-white-tools{
     width:150px;
     height: 180px;
     background-color: teal;
     position: relative;
     justify-self: center;
- 
 }
+
 .eaten-container{
     position: absolute;
     top:25%;
