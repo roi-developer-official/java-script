@@ -28,6 +28,10 @@ body{
     justify-content: space-between;
     flex-direction: column;
 }
+.out-tool{
+    width:40px;
+    height: 20px;
+}
 .out-black-tools,.out-white-tools{
     width:150px;
     height: 180px;
