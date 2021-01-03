@@ -772,8 +772,7 @@ class Board {
 
 
      
-        if (doRemove && col) {
-            
+        if (doRemove && col) {  
             col.removeChild(col.children[0]);
             let tool = this.createOutTool('black');
             this.dropBlackPalette.append(tool);
@@ -814,6 +813,7 @@ class Board {
                                 this.addEatenToContainer('green');
                                 empty.removeChild(empty.children[0])
                             }
+                            
                             this.dragged = blackCol
                             this.dropped = empty
                             doReturn = false;
@@ -830,7 +830,6 @@ class Board {
                                 this.addEatenToContainer('green');
                                 empty.removeChild(empty.children[0])
                             }
-
                             this.dragged = blackCol;
                             this.dropped = empty
                             doReturn = false;
@@ -966,7 +965,6 @@ class Board {
             this.checkForEmptyWhenEaten();
         }
         else{
-            console.log('object');
             this.enableDiceButton();
             return;
         }
@@ -985,8 +983,6 @@ class Board {
         }
         else{
             this.enableDiceButton();
-            console.log('object');
-
             return;
         }
      }
