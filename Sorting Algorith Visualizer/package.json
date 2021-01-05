@@ -1,0 +1,39 @@
+{
+  "name": "sorting-visualizer",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mime-db": "^1.45.0",
+    "mimic-fn": "^2.1.0",
+    "node-releases": "^1.1.69",
+    "npm-run-path": "^4.0.1",
+    "onetime": "^5.1.2",
+    "p-try": "^2.2.0",
+    "path-exists": "^4.0.0",
+    "path-key": "^3.1.1",
+    "path-parse": "^1.0.6",
+    "punycode": "^2.1.1",
+    "randombytes": "^2.1.0",
+    "resolve": "^1.19.0",
+    "resolve-cwd": "^3.0.0",
+    "resolve-from": "^5.0.0",
+    "safe-buffer": "^5.2.1",
+    "serialize-javascript": "^5.0.1",
+    "shebang-command": "^2.0.0",
+    "shebang-regex": "^3.0.0",
+    "signal-exit": "^3.0.3",
+    "source-list-map": "^2.0.1",
+    "source-map": "^0.6.1",
+    "source-map-support": "^0.5.19",
+    "webpack": "^5.11.1",
+    "webpack-cli": "^4.3.1"
+  },
+  "devDependencies": {},
+  "description": ""
+}

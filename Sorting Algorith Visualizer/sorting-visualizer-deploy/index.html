@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="./style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting Visualizer</title>
+    <script src="./app.js" defer></script>
+</head>
+<body>
+    <nav class="nav_bar">
+      
+        <ul class="nav_bar__items">
+            <button class="item nav_item__array_generete">Generate new array</button>
+            <li class="item nav_item__change_array_size">Change the array size</li>
+            <li class="item nav_item__range"><input id="range_input" type="range" min="4" max="35" step="1"></li>
+        </ul>
+        <ul class="nav_sotring__items">
+                <li class="item"><button class="item_sort__btn nav_item_merge_sort">Merge Sort</button></li>
+                <li class="item"><button class="item_sort__btn nav_item_quick_sort">Quick Sort</button></li>
+                <li class="item"><button class="item_sort__btn nav_item_heap_sort">Heap Sort</button></li>
+                <li class="item"><button class="item_sort__btn nav_item_bubble_sort">Bubble Sort</button></li>
+                <button class="item nav_item_sort">Sort</button>
+        </ul>
+    </nav>
+    <main>
+        <div class="container">
+            <ul class="array_cells__items"></ul>
+        </div>
+        <p class="range_text"></p>
+    </main>
+    
+</body>
+</html>
