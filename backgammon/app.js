@@ -1,32 +1,21 @@
 class Board {
-    board = document.querySelector('.board');
-    container = document.querySelector('.container');
-    cols = this.container.querySelectorAll('div ul');
-    diceBtn = document.querySelector('.dice-btn');
-    diceDivs = document.querySelector('.dice')
-    dropTitle = document.querySelector('.drop-title');
-    dropBlackPalette = document.querySelector('.out-black-tools');
-    eateanConteiner = document.querySelector('.eaten-container');
-    dropWhiteContanier = document.querySelector('.out-white-tools');
-    startNewGameDiv = document.querySelector('.start-new-game');
-    winP = document.querySelector('.win');
-    startNewBtn = document.querySelector('.start-new-btn');
-    startPlayBtn = document.querySelector('.start-play');
-    instructionDiv = document.querySelector('.instructions');
-    num1;
-    num2
-    dragged;
-    dropped;
-    playerEatenCount;
-    oppenentEatenCount;
-    isDouble;
-    doubleFlag;
-    playerToolCount;
-    oppenentToolsCount;
-    countMove;
-    tempNum1;
-    tempNum2;
-    playerTurn;
+    //comment
+    initSelectors(){
+        this.board = document.querySelector('.board');
+        this.container = document.querySelector('.container');
+        this.cols = this.container.querySelectorAll('div ul');
+        this.diceBtn = document.querySelector('.dice-btn');
+        this.diceDivs = document.querySelector('.dice')
+        this.dropTitle = document.querySelector('.drop-title');
+        this.dropBlackPalette = document.querySelector('.out-black-tools');
+        this.eateanConteiner = document.querySelector('.eaten-container');
+        this.dropWhiteContanier = document.querySelector('.out-white-tools');
+        this.startNewGameDiv = document.querySelector('.start-new-game');
+        this.winP = document.querySelector('.win');
+        this.startNewBtn = document.querySelector('.start-new-btn');
+        this.startPlayBtn = document.querySelector('.start-play');
+        this.instructionDiv = document.querySelector('.instructions');
+    }
 
     initListeners(){
         this.startPlayBtn.addEventListener('click',()=>{
@@ -70,6 +59,7 @@ class Board {
     }
 
     init() {
+              
         this.initCols()
         this.startNewGameDiv.style.visibility = 'hidden';
         this.diceDivs.children[0].style.visibility = 'hidden';
@@ -586,8 +576,8 @@ class Board {
 
 
         if (this.playerEatenCount === 0) {
-            this.num1 = num1;
-            this.num2 = num2;
+            // this.num1 = num1;
+            // this.num2 = num2;
             if (!this.checkForNoActionOnPlayer(this.num1) && !this.checkForNoActionOnPlayer(this.num2)) {
         
                 this.countMove = 0;
@@ -1391,6 +1381,8 @@ class Board {
 
 
 
+
 let board = new Board();
+board.initSelectors()
 board.initListeners();
 board.init();

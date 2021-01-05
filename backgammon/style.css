@@ -13,7 +13,6 @@ body{
     margin-left: 150px;
     width:1000px;
     min-width:1000px;
-    margin-top: 40px;
     height:700px;
     background-image: url('./images/board.png');
     background-repeat: no-repeat;
@@ -77,7 +76,7 @@ body{
     height: 650px;
     position: absolute;
     background-color: white;
-    top:10%;
+    top:3%;
     z-index: 2;
     left:20%;
     text-align: end;
@@ -112,7 +111,6 @@ body{
     flex-direction: column;
     padding: 20px 20px;
     width:250px;
-    margin-top: 40px;
     height: 700px;
     background-color: rgb(24, 56, 56);
 }
