@@ -1,0 +1,82 @@
+[debug] [2021-01-05T09:56:59.526Z] ----------------------------------------------------------------------
+[debug] [2021-01-05T09:56:59.528Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\רועי\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2021-01-05T09:56:59.528Z] CLI Version:   9.1.0
+[debug] [2021-01-05T09:56:59.528Z] Platform:      win32
+[debug] [2021-01-05T09:56:59.529Z] Node Version:  v14.15.3
+[debug] [2021-01-05T09:56:59.530Z] Time:          Tue Jan 05 2021 11:56:59 GMT+0200 (שעון ישראל (חורף))
+[debug] [2021-01-05T09:56:59.530Z] ----------------------------------------------------------------------
+[debug] [2021-01-05T09:56:59.530Z] 
+[debug] [2021-01-05T09:56:59.535Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-01-05T09:56:59.536Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\רועי\Desktop\java-script\backgammon
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[info] i  If you want to create a project in a Google Cloud organization or folder, please use "firebase projects:create" instead, and return to this command when you've created the project. 
+[debug] [2021-01-05T09:57:31.788Z] ----------------------------------------------------------------------
+[debug] [2021-01-05T09:57:31.790Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\רועי\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2021-01-05T09:57:31.790Z] CLI Version:   9.1.0
+[debug] [2021-01-05T09:57:31.790Z] Platform:      win32
+[debug] [2021-01-05T09:57:31.790Z] Node Version:  v14.15.3
+[debug] [2021-01-05T09:57:31.791Z] Time:          Tue Jan 05 2021 11:57:31 GMT+0200 (שעון ישראל (חורף))
+[debug] [2021-01-05T09:57:31.792Z] ----------------------------------------------------------------------
+[debug] [2021-01-05T09:57:31.792Z] 
+[debug] [2021-01-05T09:57:31.797Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-01-05T09:57:31.797Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\רועי\Desktop\java-script\backgammon
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[info] i  If you want to create a project in a Google Cloud organization or folder, please use "firebase projects:create" instead, and return to this command when you've created the project. 
+[debug] [2021-01-05T09:57:45.580Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2021-01-05T09:57:45.580Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2021-01-05T09:57:45.873Z] <<< HTTP RESPONSE 200 {"cache-control":"no-cache, no-store, max-age=0, must-revalidate","expires":"Mon, 01 Jan 1990 00:00:00 GMT","pragma":"no-cache","date":"Tue, 05 Jan 2021 09:57:16 GMT","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-05T09:57:45.888Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects  
+ {"projectId":"js-backgammon","name":"js-backgammon"}
+[debug] [2021-01-05T09:57:46.829Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Tue, 05 Jan 2021 09:57:17 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=757","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-05T09:57:46.831Z] > refreshing access token with scopes: []
+[debug] [2021-01-05T09:57:46.831Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2021-01-05T09:57:47.058Z] <<< HTTP RESPONSE 200 {"date":"Tue, 05 Jan 2021 09:57:17 GMT","cache-control":"no-cache, no-store, max-age=0, must-revalidate","pragma":"no-cache","expires":"Mon, 01 Jan 1990 00:00:00 GMT","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-01-05T09:57:47.071Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/operations/cp.5634748864431517955 [none]
+[debug] [2021-01-05T09:57:48.136Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/operations/cp.5634748864431517955 200
+[debug] [2021-01-05T09:57:48.136Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/operations/cp.5634748864431517955 {"name":"operations/cp.5634748864431517955","metadata":{"@type":"type.googleapis.com/google.cloudresourcemanager.v1.ProjectCreationStatus","ready":true},"done":true,"error":{"code":9,"message":"Callers must accept Terms of Service","details":[{"@type":"type.googleapis.com/google.rpc.PreconditionFailure","violations":[{"type":"TOS","subject":"cloud","description":"Callers must accept Terms of Service"}]}]}}
+[debug] [2021-01-05T09:57:48.139Z] FirebaseError: Callers must accept Terms of Service
+    at OperationPoller.poll (C:\Users\רועי\AppData\Roaming\npm\node_modules\firebase-tools\lib\operation-poller.js:23:19)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
+    at async createCloudProject (C:\Users\רועי\AppData\Roaming\npm\node_modules\firebase-tools\lib\management\projects.js:174:29)
+    at async Object.createFirebaseProjectAndLog (C:\Users\רועי\AppData\Roaming\npm\node_modules\firebase-tools\lib\management\projects.js:40:9)
+    at async promptAndCreateNewProject (C:\Users\רועי\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\features\project.js:32:12)
+    at async Object.doSetup [as project] (C:\Users\רועי\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\features\project.js:87:27)
+    at async init (C:\Users\רועי\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\index.js:19:9)
+[error] 
+[error] Error: Failed to create project. See firebase-debug.log for more info.
