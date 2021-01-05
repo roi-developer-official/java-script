@@ -1,3 +1,4 @@
+
 const SET_LENGTH = 35;
 const START_LENGTH = 4;
 class Main {
@@ -6,6 +7,7 @@ class Main {
     generateNewArrayBtn = document.querySelector('.nav_item__array_generete');
     arrayCellsList = document.querySelector('.array_cells__items');
     sortBtn = document.querySelector('.nav_item_sort');
+    sortBtns = document.querySelectorAll('.item_sort__btn');
     originalArray;
     algorithm;
 
@@ -64,7 +66,6 @@ class Main {
             this.arrayCellsList.children[i].id = i;
         }
     }
-
 
     genrerateNewArray() {
         let parent = this.originalArray;
@@ -126,9 +127,15 @@ class Main {
         if (this.algorithm === undefined) {
             alert('please choose an algorithm');
         } else if (doSort) {
+   
+            for(let sortBtn of this.sortBtns){
+                sortBtn.setAttribute('disabled', true);
+            }
+
             this.sortBtn.setAttribute('disabled', true);
             this.rangeInput.setAttribute('disabled', true);
             this.generateNewArrayBtn.setAttribute('disabled', true);
+
             this.generateNewArrayBtn.style.color = '#ccc';
             this.sortBtn.style.color = '#ccc'
             this.sort();
@@ -163,10 +170,6 @@ class Main {
         listItem.append(number);
     }
 
-    setAlgorithem(algo) {
-        this.algorithm = algo;
-
-    }
 }
 
 class Shared extends Main {
@@ -178,6 +181,10 @@ class Shared extends Main {
     onDoneSort() {
         for (let i = 0; i < this.array.length; i++) {
             this.array[i].style.background = 'green';
+        }
+        for(let sortBtn of this.sortBtns){
+            sortBtn.removeAttribute('disabled', true);
+
         }
         this.rangeInput.removeAttribute('disabled', true);
         this.sortBtn.removeAttribute('disabled', true);
@@ -207,6 +214,7 @@ class Shared extends Main {
     }
 
 
+
 }
 
 
@@ -221,45 +229,41 @@ class Nav {
     init() {
         this.main.init();
         this.bubbleSortBtn.addEventListener('click', () => {
-            this.main.algorithm = 'bubble-sort';
-            for (let i = 0; i < this.navSortingItems.children.length; i++) 
-                this.navSortingItems.children[i].style.color = 'white';
             
-
-
+            this.setAlgorithem('bubble-sort');
             this.bubbleSortBtn.style.color = 'red';
+         
         });
 
         this.heapSortBtn.addEventListener('click', () => {
-            this.main.algorithm = 'heap-sort';
-            for (let i = 0; i < this.navSortingItems.children.length; i++) 
-                this.navSortingItems.children[i].style.color = 'white';
-            
-
-
+               
+            this.setAlgorithem('heap-sort');
             this.heapSortBtn.style.color = 'red';
+            
         });
-
+        
         this.quickSortBtn.addEventListener('click', () => {
-            this.main.algorithm = 'quick-sort';
-            for (let i = 0; i < this.navSortingItems.children.length; i++) 
-                this.navSortingItems.children[i].style.color = 'white';
-            
-
-
+            this.setAlgorithem('quick-sort');
             this.quickSortBtn.style.color = 'red';
-        });
-
-        this.mergeSortBtn.addEventListener('click', () => {
-            this.main.algorithm = 'merge-sort';
-            for (let i = 0; i < this.navSortingItems.children.length; i++) 
-                this.navSortingItems.children[i].style.color = 'white';
             
-
-
+        });
+        
+        this.mergeSortBtn.addEventListener('click', () => {
+            this.setAlgorithem('merge-sort');
             this.mergeSortBtn.style.color = 'red';
         });
     }
+
+    setAlgorithem(algo) {
+        this.main.algorithm = algo;
+        for(let btn of this.main.sortBtns){
+            btn.style.color = 'black';
+        }
+
+
+    }
+
+    
 }
 let nav = new Nav();
 nav.init();

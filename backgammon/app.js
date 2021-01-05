@@ -1,5 +1,5 @@
 class Board {
-    //comment
+  
     initSelectors(){
         this.board = document.querySelector('.board');
         this.container = document.querySelector('.container');

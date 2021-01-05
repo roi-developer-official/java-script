@@ -10,6 +10,14 @@
     font-family: 'Oswald', sans-serif;
 }
 
+.item_sort__btn{
+    background-color: transparent;
+    border:none;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+
 
 .nav_bar{
     background-color: blue;
