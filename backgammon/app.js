@@ -28,18 +28,6 @@ class Board {
     tempNum2;
     playerTurn;
 
-    timer(){
-        setInterval(()=>{
-            console.log('count move', this.countMove + '\n',
-             'turn', this.playerTurn  + '\n',
-             'num1', this.num1  + '\n',
-             'num2', this.num2  + '\n',
-             'playerEatenCount', this.playerEatenCount  + '\n',
-             'isDouble', this.isDouble  + '\n'
-              );
-        }, 1000)
-    }
-
     initListeners(){
         this.startPlayBtn.addEventListener('click',()=>{
             this.instructionDiv.style.visibility = 'hidden'
@@ -81,10 +69,8 @@ class Board {
         })  
     }
 
-
     init() {
         this.initCols()
-        this.timer()
         this.startNewGameDiv.style.visibility = 'hidden';
         this.diceDivs.children[0].style.visibility = 'hidden';
         this.diceDivs.children[1].style.visibility = 'hidden';
@@ -101,7 +87,6 @@ class Board {
         this.num1 = null;
         this.num2 = null;
     }
-
 
     handlePlayerMovment() {
         let validate;
@@ -165,7 +150,6 @@ class Board {
         return isWin;
     }
 
-   
     handlerOutMovment() {
         let houseCols = this.getWhiteCols().sort((a,b)=>b.id - a.id)
         let blackcols = this.getEmptyAndBlackCols();
@@ -195,21 +179,21 @@ class Board {
             else {
                 this.num1 = this.num1 || this.tempNum1;
                 this.num2 = this.num2 || this.tempNum2;
-                console.log(this.num1,this.num2);
+            
                 for (let col of houseCols) {
                     let firstCol = col.children.length;
-                    console.log(firstCol, +col.id);
+               
                     if (firstCol) {
                         if(this.num1 > +col.id && dragPos === +col.id){
                            isWin = this.moveOutPlayerTool();
                            if(isWin){
                             return;
                         }
-                            console.log('1');
+                            
                             break;
                         }
                         else if(this.num2 > +col.id && dragPos === +col.id){
-                          console.log('2');
+                          
                            isWin = this.moveOutPlayerTool();
                            if(isWin){
                             return;
@@ -223,11 +207,6 @@ class Board {
                 }
             }
   
-
-
-
-      
-
         if ((this.countMove === 2 && !this.isDouble)
             || (this.countMove === 4 && this.isDouble)) {   
                 
@@ -244,16 +223,10 @@ class Board {
         if(this.isDouble){
             this.num1 = this.tempNum1;
             this.num2 = this.tempNum2;
-        }
-    
-
-
-    
+        }  
 
 }
 
-
-//check this function 
     checkForNoActionOnPlayerHouse(){
     
         //empty and white
@@ -312,7 +285,6 @@ class Board {
     }
 
     initCols() {
-
         this.removeChildrens(this.dropBlackPalette);
         this.removeChildrens(this.eateanConteiner);
         this.removeChildrens(this.dropWhiteContanier);
@@ -374,10 +346,6 @@ class Board {
 
         this.playerTurn = !this.playerTurn;
         
-     
-        console.log(this.playerTurn);
-        console.log(this.num1,this.num2);
-
         this.tempNum1 = this.num1;
         this.tempNum2 = this.num2
     
@@ -421,7 +389,6 @@ class Board {
             this.isDouble = false; 
     }
 
-
     checkForWin(){
 
         if(this.oppenentToolsCount === 0){
@@ -438,8 +405,6 @@ class Board {
 
         return false;
     }
-
-
 
     fillCols(number, col, color) {
         for (let i = 0; i < number; i++) {
@@ -559,8 +524,6 @@ class Board {
         return false;
    }
 
-
-   
     checkForAllToolInHouseOpponent() {
         let houseCols = [];
         let toolCount = 0;
@@ -580,9 +543,6 @@ class Board {
         }
         return false;
     }
-
-
-
 
     handleDragAndDropWhileEaten() {
         const dropped = 24 - +this.dropped.id + 1;
@@ -668,14 +628,12 @@ class Board {
 
     }
 
-
     switchTurn() {
         setTimeout(() => {
             this.genrateRandomNumbers();
             this.opponentMove();
         }, 300)
     }
-
 
     handleDragAndDrop() {
         const dropped = +this.dropped.id;
@@ -709,8 +667,6 @@ class Board {
                 this.countMove++;
           }
         
-
-
         //if the player finished switch turn
         if ((this.isDouble && this.countMove === 4) || (!this.isDouble && this.countMove === 2)) {
             this.countMove = 0;
@@ -776,7 +732,6 @@ class Board {
         let num2 = this.num2;
         let isWin;
 
-        console.log('object');
         if ((this.isDouble && this.countMove === 4) ||
             !this.isDouble && this.countMove === 2
         ) {
@@ -805,7 +760,7 @@ class Board {
         }
         if (doRemove && col) {
            
-            console.log('1', col);
+            
             col.removeChild(col.children[0]);
             let tool = this.createOutTool('black');
             this.dropBlackPalette.append(tool);
@@ -840,7 +795,7 @@ class Board {
             }
         }
         if (doRemove && col) {  
-            console.log('2',col);
+            
             col.removeChild(col.children[0]);
             let tool = this.createOutTool('black');
             this.dropBlackPalette.append(tool);
@@ -867,7 +822,7 @@ class Board {
         }
     
         if (this.checkForOppnentMovmentAbility()) {
-            console.log('object');
+            
             if (this.isDouble && this.countMove < 4) {
                 this.num1 = num1;
                 this.num2 = num2;
@@ -878,7 +833,7 @@ class Board {
                         if((blackPos + this.num1 === emptyPos) && doReturn) {
                             this.moveOppenent(empty,blackCol);
                             doReturn = false;
-                            console.log('3');
+                            
                             blackCols = this.getBlackCols().filter(col => +col.id > 18);
                             emptyCols = this.getEmptyBlackAndOnesWhiteCols().filter(col => +col.id > 18);
                             this.allHouseOppenetMove();
@@ -886,7 +841,7 @@ class Board {
                         else if((blackPos + this.num2 === emptyPos) && doReturn) {
                             this.moveOppenent(empty,blackCol);
                             doReturn = false;
-                            console.log('4');
+                            
             
                             blackCols = this.getBlackCols().filter(col => +col.id > 18);
                             emptyCols = this.getEmptyBlackAndOnesWhiteCols().filter(col => +col.id > 18);
@@ -905,13 +860,13 @@ class Board {
                             this.moveOppenent(empty,blackCol)
                             blackCols = this.getBlackCols().filter(col => +col.id > 18);
                             emptyCols = this.getEmptyBlackAndOnesWhiteCols().filter(col => +col.id > 18);
-                            console.log('5');
+                            
                             this.allHouseOppenetMove();
                             doReturn = false;
                         }
                         else if (this.num2 && (blackPos + this.num2 === emptyPos) && doReturn) {
                             this.moveOppenent(empty,blackCol)
-                            console.log('6');
+                            
                             blackCols = this.getBlackCols().filter(col => +col.id > 18);
                             emptyCols = this.getEmptyBlackAndOnesWhiteCols().filter(col => +col.id > 18);
                             this.allHouseOppenetMove();
@@ -969,8 +924,6 @@ class Board {
         return cols;
     }
 
-
-
     opponentMove() {
         let isAction = this.checkForNoActionOnOpponent(this.num1) || this.checkForNoActionOnOpponent(this.num2);
         let isActionWhileEaten = this.checkForNoActionWhilteEatenOppenent();
@@ -1000,7 +953,6 @@ class Board {
             }
         }
     }
-
 
     getBlackCols() {
         let blackCols = [];
@@ -1113,13 +1065,13 @@ class Board {
         for (let i = 0; i < whiteCols.length && this.oppenentEatenCount; i++) {
             if (this.num1 === +whiteCols[i].id && this.oppenentEatenCount) {
                 whiteCols = this.eatPlayerWhenEaten(whiteCols[i]);
-                console.log('cfewe 1');
+                
                 this.num1 = null; 
             }
             else if (this.num2 === +whiteCols[i].id && this.oppenentEatenCount) {
                 whiteCols = this.eatPlayerWhenEaten(whiteCols[i]);
                 this.num2 = null;
-                console.log('cfewe 2');
+                
             }
 
         }
@@ -1130,8 +1082,6 @@ class Board {
             return;
         }
     
-        
-
         //check for empty spaces
         if (this.oppenentEatenCount){
       
@@ -1140,7 +1090,7 @@ class Board {
                     this.putToolOutFromEaten(cols[i]);
                     this.num1 = null;
               
-                    console.log('cfewe 3');
+                    
 
 
                     if (this.oppenentEatenCount === 0)
@@ -1150,7 +1100,7 @@ class Board {
                
                     this.putToolOutFromEaten(cols[i]);
                     this.num2 = null;
-                    console.log('cfewe 4');
+                    
                     if (this.oppenentEatenCount === 0)
                         break;
                 }
@@ -1169,11 +1119,11 @@ class Board {
                 this.num1 = num1;
                 this.num2 = num2;
                 this.checkForEmptyWhenEaten()
-                console.log('1');
+                
             }
             else {
                 if (!this.num1 && this.num2) {
-                    console.log('2');
+                    
                     this.num1 = num1;
                     this.chackforEmpty();
                     this.num1 = null;
@@ -1181,7 +1131,7 @@ class Board {
                     this.chackforEmpty();
                 }
                 else if (!this.num2 && this.num1) {
-                    console.log('3');
+                    
                     this.num2 = num2;
                     this.chackforEmpty();
                     this.num2 = null;
@@ -1189,7 +1139,7 @@ class Board {
                     this.chackforEmpty();
                 }
                 else if (!this.num1 && !this.num2) {
-                    console.log('4');
+                    
                     this.num1 = num1;
                     this.num2 = num2;
                     this.chackforEmpty();
@@ -1204,7 +1154,7 @@ class Board {
                     return;
                 }
                 else {
-                    console.log('6');
+                    
                     this.chackforEmpty();
                 }
             }
@@ -1266,7 +1216,7 @@ class Board {
             //this cond is for when a player dont eat with num1 and num2 and then he moves and can eat
             
             if (emptyCol) {
-                console.log('cfe 3');
+                
                 
                 if (emptyCol.children.length === 1 && emptyCol.children[0].classList[1] === 'white-tool') {
                     this.playerEatenCount++;
@@ -1289,7 +1239,7 @@ class Board {
             for (let j = 0; j < whiteCols.length; j++) {
                 let whiteCol = +whiteCols[j].id
                 if (this.num1 && ((blackCol + this.num1)=== whiteCol)) {
-                    console.log('cfe 1');
+                    
              
                     blackCols = this.oppenentEatPlayer(blackCols[i], whiteCols[j])
                     this.num1 = null;
@@ -1302,7 +1252,7 @@ class Board {
 
                 else if (this.num2 && ((blackCol + this.num2) === whiteCol)) {
                     blackCols = this.oppenentEatPlayer(blackCols[i], whiteCols[j])
-                    console.log('cfe 2');
+                    
               
                     this.num2 = null;
                     if(this.playerEatenCount === 0){
@@ -1313,8 +1263,6 @@ class Board {
 
             }
         }
-
-
 
         blackCols = this.getBlackCols();
 
@@ -1331,7 +1279,7 @@ class Board {
             }
 
             if (emptyCol) {
-                console.log('cfe 4');
+                
 
 
                //this cond is for when a player dont eat with num1 and num2 and then he moves and can eat
@@ -1353,7 +1301,7 @@ class Board {
             for (let j = 0; j < whiteCols.length; j++) {
                 let whiteCol = +whiteCols[j].id
                 if (this.num1 && ((blackCol + this.num1)=== whiteCol)) {
-                    console.log('cfe 1');
+                    
                     blackCols = this.oppenentEatPlayer(blackCols[i], whiteCols[j])
                     this.num1 = null;
                     if(this.playerEatenCount === 0){
@@ -1365,7 +1313,7 @@ class Board {
 
                 else if (this.num2 && ((blackCol + this.num2) === whiteCol)) {
                     blackCols = this.oppenentEatPlayer(blackCols[i], whiteCols[j])
-                    console.log('cfe 2');
+                    
               
                     this.num2 = null;
                     if(this.playerEatenCount === 0){
@@ -1378,7 +1326,6 @@ class Board {
         }
         
   
-
         blackCols = this.getBlackCols();
         for (let i = 0; i < blackCols.length && this.num1; i++) {
             let blackPos = +blackCols[i].id;
@@ -1399,7 +1346,7 @@ class Board {
                     this.eatanHandler('green', emptyCol);
                     this.playerEatenCount++;
                 }
-                console.log('cfe 5')
+                
                 this.dragged = this.getColById(blackCols, blackPos);
                 this.dropped = emptyCol;
                 this.handleOppenentMovment();
@@ -1428,7 +1375,6 @@ class Board {
         this.eateanConteiner.append(tool)
     }
 
-
     getColById(array, id) {
 
         for (let i = 0; i < array.length; i++) {
@@ -1448,4 +1394,3 @@ class Board {
 let board = new Board();
 board.initListeners();
 board.init();
-// new Board().init()
