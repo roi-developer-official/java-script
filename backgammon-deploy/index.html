@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="./app.js" defer></script>
+    <title>Backgammon</title>
+</head>
+<body>
+    <div class="start-new-game">
+        <p class="win"></p>
+        <button class="start-new-btn">התחל משחק חדש</button>
+    </div>
+
+    <div class="instructions">
+        <h1>:כללי המשחק</h1>
+        <ul>
+            <p>.1</p>
+            <li>מטרת המשחק היא להביא את כל הכלים הירוקים אל הרביע הימני התחתון של הלוח</li>
+            <p>.2</p>
+            <li>לשחקן מותר לזוז רק נגד כיוון השעון ורק על פי המספר הקוביות שגלגל</li>
+            <p>.3</p>
+            <li>אם מספר שני הקוביות זהה השחקן יוכל לזוז ארבע פעמים כמספר הקוביות לדוגמא: 2 2 = 2 + 2 + 2 + 2</li>
+            <p>.4</p>
+            <li>לשחקן מותר לאכול כלי של יריבו רק במקרה שבעמודת הכלי של היריב  קיים כלי אחד בלבד</li>
+            <p>.5</p>
+            <li>היריב יכול לאכול כלים של השחקן ובמקרה שנאכל כלי הוא יועבר למרכז הלוח עד אשר הכלי יצא</li>
+            <p>.6</p>
+            <li>כלי של שחקן יכול לצאת ממרכז הלוח אם מספר הקוביות מצביע על עמודה ריקה ברביע הימני העליון של הלוח  (ימני תחתון במקרה של היריב) או בעלת שחקן יריב אחד או בעלת שחקנים של אותה קבוצה</li>
+            <p>.7</p>
+            <li>רק כאשר כל השחקנים נמצאים בעמודה הימנית התחתונה השחקן יוכל להתחיל להוציאם אל המגש שמימין</li>
+            <p>.8</p>
+            <li>המצנח הוא הראשון שהצליח להוציא את כל השחקנים אל מחוץ ללוח</li>
+        </ul>
+        <button class="start-play">התחל במשחק</button>
+    </div>
+
+    <div class="board" draggable="false">
+        <div class="container" draggable="false">
+                <div class="cols_left__container" draggable="false">
+                    <ul draggable="false" class="col" id="13"></ul>
+                    <ul draggable="false" class="col" id="14"></ul>
+                    <ul draggable="false" class="col" id="15"></ul>
+                    <ul draggable="false" class="col" id="16"></ul>
+                    <ul draggable="false" class="col" id="17"></ul>
+                    <ul draggable="false" class="col" id="18"></ul>
+                    <ul draggable="false" class="col" id="12"></ul>
+                    <ul draggable="false" class="col" id="11"></ul>
+                    <ul draggable="false" class="col" id="10"></ul>
+                    <ul draggable="false" class="col" id="9"></ul>
+                    <ul draggable="false" class="col" id="8"></ul>
+                    <ul draggable="false" class="col" id="7"></ul>
+                </div>
+                <div class="eaten-container"></div>
+                <div class="cols_right__container" draggable="false">
+                    <ul draggable="false" class="col" id="19"></ul>
+                    <ul draggable="false" class="col" id="20"></ul>
+                    <ul draggable="false" class="col" id="21"></ul>
+                    <ul draggable="false" class="col" id="22"></ul>
+                    <ul draggable="false" class="col" id="23"></ul>
+                    <ul draggable="false" class="col" id="24"></ul>
+                    <ul draggable="false" class="col" id="6"></ul>
+                    <ul draggable="false" class="col" id="5"></ul>
+                    <ul draggable="false" class="col" id="4"></ul>
+                    <ul draggable="false" class="col" id="3"></ul>
+                    <ul draggable="false" class="col" id="2"></ul>
+                    <ul draggable="false" class="col" id="1"></ul>
+                </div>
+        </div>
+    </div>
+    <div class="dice-container">
+        <button class="dice-btn">גלגל קוביות</button>
+        <div class="dice">
+          <img style="visibility: hidden;"><img style="visibility: hidden;">
+        </div>
+        <div class="out-tools-container">
+            <div class="out-black-tools"></div>
+            <div class="out-white-tools"><p class="drop-title"></p></div>
+        </div>
+   
+    </div>
+
+</body>
+</html>
