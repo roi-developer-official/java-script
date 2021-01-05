@@ -94,12 +94,12 @@ body{
     padding:5px 6px;
 }
 
-
 .eaten-container{
     position: absolute;
     display:flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     left:46.8%;
     width:62px;
     height: 620px;
