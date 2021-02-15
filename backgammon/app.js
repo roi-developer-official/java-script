@@ -335,7 +335,10 @@ class Board {
         this.diceDivs.children[1].style.visibility = 'visible';
 
         this.playerTurn = !this.playerTurn;
-        
+ 
+        this.num1 = 3;
+        this.num2 = 3;
+
         this.tempNum1 = this.num1;
         this.tempNum2 = this.num2
     
@@ -362,7 +365,6 @@ class Board {
                     //if no action with first number check for second number
                     if (!this.checkForNoActionOnPlayer(this.num2))
                         setTimeout(() => {
-                         
                             this.switchTurn();
                             return;
                     }, 300)
@@ -699,7 +701,7 @@ class Board {
     }
 
 
-    moveOppenent(empty,blackCol){
+    async moveOppenent(empty,blackCol){
         if (empty.children.length && empty.children[0].classList[1] === 'white-tool') {
             this.playerEatenCount++;
             this.addEatenToContainer('green');
@@ -708,11 +710,11 @@ class Board {
 
         this.dragged = blackCol
         this.dropped = empty
-        this.handleOppenentMovment();
+        await this.handleOppenentMovment();
         this.countMove++;
     }
 
-    allHouseOppenetMove() {
+    async allHouseOppenetMove() {
         let blackCols = this.getBlackCols();
         blackCols = blackCols.filter(col => +col.id > 18);
         let emptyCols = this.getEmptyBlackAndOnesWhiteCols().filter(col => +col.id > 18);
@@ -749,8 +751,6 @@ class Board {
             }
         }
         if (doRemove && col) {
-           
-            
             col.removeChild(col.children[0]);
             let tool = this.createOutTool('black');
             this.dropBlackPalette.append(tool);
@@ -808,7 +808,7 @@ class Board {
             this.doubleFlag = false;
             this.num1 = num1;
             this.num2 = num2;
-            this.allHouseOppenetMove();
+            await this.allHouseOppenetMove();
         }
     
         if (this.checkForOppnentMovmentAbility()) {
@@ -826,7 +826,7 @@ class Board {
                             
                             blackCols = this.getBlackCols().filter(col => +col.id > 18);
                             emptyCols = this.getEmptyBlackAndOnesWhiteCols().filter(col => +col.id > 18);
-                            this.allHouseOppenetMove();
+                            await this.allHouseOppenetMove();
                         }
                         else if((blackPos + this.num2 === emptyPos) && doReturn) {
                             this.moveOppenent(empty,blackCol);
@@ -835,7 +835,7 @@ class Board {
             
                             blackCols = this.getBlackCols().filter(col => +col.id > 18);
                             emptyCols = this.getEmptyBlackAndOnesWhiteCols().filter(col => +col.id > 18);
-                            this.allHouseOppenetMove();
+                            await this.allHouseOppenetMove();
                         }
                     }
                 }
@@ -851,7 +851,7 @@ class Board {
                             blackCols = this.getBlackCols().filter(col => +col.id > 18);
                             emptyCols = this.getEmptyBlackAndOnesWhiteCols().filter(col => +col.id > 18);
                             
-                            this.allHouseOppenetMove();
+                            await this.allHouseOppenetMove();
                             doReturn = false;
                         }
                         else if (this.num2 && (blackPos + this.num2 === emptyPos) && doReturn) {
@@ -859,7 +859,7 @@ class Board {
                             
                             blackCols = this.getBlackCols().filter(col => +col.id > 18);
                             emptyCols = this.getEmptyBlackAndOnesWhiteCols().filter(col => +col.id > 18);
-                            this.allHouseOppenetMove();
+                            await this.allHouseOppenetMove();
                             doReturn = false;
                         }
 
@@ -872,10 +872,17 @@ class Board {
             this.doubleFlag = false;
             this.num1 = num1;
             this.num2 = num2;
-            this.allHouseOppenetMove();
+            await this.allHouseOppenetMove();
         }
 
         this.enableDiceButton();
+
+        return new Promise((resolve,reject)=>{
+            setTimeout(()=>{
+
+                resolve();
+            },500)
+        })
      
     }
 
@@ -914,7 +921,7 @@ class Board {
         return cols;
     }
 
-    opponentMove() {
+    async opponentMove() {
         let isAction = this.checkForNoActionOnOpponent(this.num1) || this.checkForNoActionOnOpponent(this.num2);
         let isActionWhileEaten = this.checkForNoActionWhilteEatenOppenent();
 
@@ -930,7 +937,7 @@ class Board {
         }
         else{
             if (this.checkForAllToolInHouseOpponent()) {
-                this.allHouseOppenetMove();
+                await this.allHouseOppenetMove();
                 this.countMove = 0;
             }
             else if(isAction){
@@ -982,6 +989,11 @@ class Board {
         let tool = this.createTool('black');
         this.dragged.removeChild(this.dragged.children[0]);
         this.dropped.appendChild(tool)
+        return new Promise((resolve, reject)=>{
+            setTimeout(()=>{
+                resolve({num1: this.num1,num2:this.num2});
+            },500)
+        })
     }
 
     eatPlayerWhenEaten(removed){
@@ -995,8 +1007,11 @@ class Board {
         removed = this.getWhiteOnesCols();
         removed = removed.filter(col => col.id <= 6);
         this.oppenentEatenCount--;
-
-        return removed;
+        return new Promise((resolve, reject)=>{
+            setTimeout(()=>{
+                resolve(removed)
+            },500)
+        })
     }
 
     putToolOutFromEaten(col){
@@ -1004,6 +1019,11 @@ class Board {
         let tool = this.createTool('black');
         col.append(tool)
         this.oppenentEatenCount--;
+        return new Promise((resolve, reject)=>{
+            setTimeout(()=>{
+                resolve()
+            },500)
+        })
     }
 
     checkForNoActionOnOpponent(num) {
@@ -1038,7 +1058,7 @@ class Board {
 
     }
 
-    checkForEmptyWhenEaten() {
+    async checkForEmptyWhenEaten() {
 
         let cols = this.getEmptyAndBlackCols();
         let whiteCols = this.getWhiteOnesCols();
@@ -1054,18 +1074,17 @@ class Board {
         //check for singles first
         for (let i = 0; i < whiteCols.length && this.oppenentEatenCount; i++) {
             if (this.num1 === +whiteCols[i].id && this.oppenentEatenCount) {
-                whiteCols = this.eatPlayerWhenEaten(whiteCols[i]);
+                whiteCols = await this.eatPlayerWhenEaten(whiteCols[i]);
                 
                 this.num1 = null; 
             }
             else if (this.num2 === +whiteCols[i].id && this.oppenentEatenCount) {
-                whiteCols = this.eatPlayerWhenEaten(whiteCols[i]);
+                whiteCols = await this.eatPlayerWhenEaten(whiteCols[i]);
                 this.num2 = null;
                 
             }
 
         }
-
 
         if(!this.num1 && !this.num2 && !this.isDouble){
             this.enableDiceButton();
@@ -1077,7 +1096,7 @@ class Board {
       
             for (let i = 0; i < cols.length; i++) {
                 if (this.num1 === +cols[i].id) {
-                    this.putToolOutFromEaten(cols[i]);
+                    await this.putToolOutFromEaten(cols[i]);
                     this.num1 = null;
               
                     
@@ -1088,7 +1107,7 @@ class Board {
                 }
                 if (this.num2 === +cols[i].id) {
                
-                    this.putToolOutFromEaten(cols[i]);
+                    await this.putToolOutFromEaten(cols[i]);
                     this.num2 = null;
                     
                     if (this.oppenentEatenCount === 0)
@@ -1158,9 +1177,9 @@ class Board {
         this.eateanConteiner.append(tool)
     }
 
+
     removeEatenFromContainer(color) {
         let eatens = this.eateanConteiner.children;
-
         for (let eaten of eatens) {
             if (eaten.style.backgroundColor === color) {
                 eaten.parentElement.removeChild(eaten);
@@ -1171,52 +1190,52 @@ class Board {
     }
 
     oppenentEatPlayer(dragged, dropped){
-        let blackCols;
-        this.playerEatenCount++;
-        this.eatanHandler('green', dropped)
-        this.dragged = dragged
-        this.dropped = dropped;
-        this.handleOppenentMovment()
+        return new Promise((resolve,reject)=>{
+            setTimeout(()=>{
+                let blackCols;
+                this.playerEatenCount++;
+                this.eatanHandler('green', dropped)
+                this.dragged = dragged
+                this.dropped = dropped;
+                this.handleOppenentMovment()
+                blackCols = this.getBlackCols();
+                resolve(blackCols);
+            },500)
 
-        blackCols = this.getBlackCols();
-        return blackCols;
+        })
     }
 
 
-
-    chackforEmpty() {
+   async chackforEmpty() {
         let emptyCols = this.getEmptyAndBlackCols();
         let blackCols = this.getBlackCols();
         let whiteCols = this.getWhiteOnesCols();
         let num1 = this.num1;
         let num2 = this.num2;
-   
+
 
         for (let i = 0; i < blackCols.length && this.num1; i++) {
             let blackPos = +blackCols[i].id;
             let destiny = blackPos + this.num1;
-
             if ((blackPos + this.num1) >= 25 && this.checkForAllToolInHouseOpponent()) {
-                this.allHouseOppenetMove();
+                await this.allHouseOppenetMove();
+
                 break;
             }
-
             let emptyCol = this.getColById(emptyCols, destiny);     
 
-            //this cond is for when a player dont eat with num1 and num2 and then he moves and can eat
-            
+            //this cond is for when a player dont eat with this.num1 and num2 and then he moves and can eat
             if (emptyCol) {
-                
-                
+       
                 if (emptyCol.children.length === 1 && emptyCol.children[0].classList[1] === 'white-tool') {
                     this.playerEatenCount++;
-                this.eatanHandler('green', emptyCol);
+                    this.eatanHandler('green', emptyCol);
                 }
-
+                
                 this.dragged = this.getColById(blackCols, blackPos);
                 this.dropped = emptyCol;
-                this.handleOppenentMovment();
                 this.num1 = null;
+                await this.handleOppenentMovment();
                 break;
             }
         }
@@ -1228,23 +1247,16 @@ class Board {
             let blackCol = +blackCols[i].id;
             for (let j = 0; j < whiteCols.length; j++) {
                 let whiteCol = +whiteCols[j].id
-                if (this.num1 && ((blackCol + this.num1)=== whiteCol)) {
-                    
-             
-                    blackCols = this.oppenentEatPlayer(blackCols[i], whiteCols[j])
+                if (this.num1 && ((blackCol + this.num1) === whiteCol)) {
+                    blackCols =  await this.oppenentEatPlayer(blackCols[i], whiteCols[j])
                     this.num1 = null;
                     if(this.playerEatenCount === 0){
                         break;
                     }
-                  
                 }
-
-
-                else if (this.num2 && ((blackCol + this.num2) === whiteCol)) {
-                    blackCols = this.oppenentEatPlayer(blackCols[i], whiteCols[j])
-                    
-              
-                    this.num2 = null;
+                else if (this.num1 && ((blackCol + this.num1) === whiteCol)) {
+                    blackCols = await this.oppenentEatPlayer(blackCols[i], whiteCols[j])
+                    this.num1 = null;
                     if(this.playerEatenCount === 0){
                         break;
                     }
@@ -1256,31 +1268,27 @@ class Board {
 
         blackCols = this.getBlackCols();
 
-        for (let i = 0; i < blackCols.length && this.num2; i++) {
+        for (let i = 0; i < blackCols.length && this.num1; i++) {
+          
             let blackPos = +blackCols[i].id;
-            let destiny = blackPos + this.num2;
-
+            let destiny = blackPos + this.num1;
             let emptyCol = this.getColById(emptyCols, destiny);
 
-            if ((blackPos + this.num2 >= 25) && this.checkForAllToolInHouseOpponent()) {
-                this.allHouseOppenetMove();
-      
+            if ((blackPos + this.num1 >= 25) && this.checkForAllToolInHouseOpponent()) {
+                await this.allHouseOppenetMove();
                 break;
             }
 
             if (emptyCol) {
-                
-
-
-               //this cond is for when a player dont eat with num1 and num2 and then he moves and can eat
+               //this cond is for when a player dont eat with this.num1 and this.num1 and then he moves and can eat
                 if (emptyCol.children.length === 1 && emptyCol.children[0].classList[1] === 'white-tool') {
                     this.eatanHandler('green', emptyCol);
                     this.playerEatenCount++;
                 }
                 this.dropped = emptyCol;
                 this.dragged = this.getColById(blackCols, blackPos);
-                this.num2 = null;
-                this.handleOppenentMovment();
+                this.num1 = null;
+                await this.handleOppenentMovment();
                 break;
             }
         }
@@ -1291,31 +1299,24 @@ class Board {
             for (let j = 0; j < whiteCols.length; j++) {
                 let whiteCol = +whiteCols[j].id
                 if (this.num1 && ((blackCol + this.num1)=== whiteCol)) {
-                    
-                    blackCols = this.oppenentEatPlayer(blackCols[i], whiteCols[j])
+                    blackCols = await this.oppenentEatPlayer(blackCols[i], whiteCols[j])
                     this.num1 = null;
                     if(this.playerEatenCount === 0){
                         break;
                     }
-                  
                 }
 
-
-                else if (this.num2 && ((blackCol + this.num2) === whiteCol)) {
-                    blackCols = this.oppenentEatPlayer(blackCols[i], whiteCols[j])
-                    
-              
-                    this.num2 = null;
+                else if (this.num1 && ((blackCol + this.num1) === whiteCol)) {
+                    blackCols = await this.oppenentEatPlayer(blackCols[i], whiteCols[j])
+                    this.num1 = null;
                     if(this.playerEatenCount === 0){
                         break;
                     }
-                 
                 }
 
             }
         }
-        
-  
+
         blackCols = this.getBlackCols();
         for (let i = 0; i < blackCols.length && this.num1; i++) {
             let blackPos = +blackCols[i].id;
@@ -1325,8 +1326,7 @@ class Board {
 
 
             if ((blackPos + this.num1 >= 25) && this.checkForAllToolInHouseOpponent()) {
-                this.allHouseOppenetMove();
-    
+                await this.allHouseOppenetMove();
                 break;
             }
 
@@ -1336,25 +1336,29 @@ class Board {
                     this.eatanHandler('green', emptyCol);
                     this.playerEatenCount++;
                 }
+
                 
                 this.dragged = this.getColById(blackCols, blackPos);
                 this.dropped = emptyCol;
-                this.handleOppenentMovment();
-                this.num2 = null;
+                await this.handleOppenentMovment();
+                this.num1 = null;
                 break;
             }
         }
 
+
         if (this.isDouble && !this.checkForAllToolInHouseOpponent()) {
             this.isDouble = false;
             this.num1 = num1;
-            this.num2 = num2;
+            this.num1 = num2;
             this.chackforEmpty();
         }
 
         if(!this.isDouble){
             this.enableDiceButton();
         }
+
+  
 
     }
 
